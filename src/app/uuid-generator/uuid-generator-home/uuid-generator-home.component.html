@@ -1,0 +1,12 @@
+<div class="center">
+    <button mat-raised-button (click)="generateNewUuid()" color="primary">Gerar UUID</button>
+
+</div>
+
+<div class="center hand-click">
+    <div>
+        <span>
+            {{uuid}} <mat-icon (click)="copyValue()">content_copy</mat-icon>
+        </span>
+    </div>
+</div>

@@ -4,6 +4,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '../material/material.module';
+import { UUIDGeneratorModule } from '../uuid-generator/uuid-generator.module';
 import { MenuComponent } from './menu.component';
 
 @NgModule({
@@ -17,6 +18,7 @@ import { MenuComponent } from './menu.component';
     FormsModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    UUIDGeneratorModule
   ],
   providers: [],
   bootstrap: [MenuComponent]

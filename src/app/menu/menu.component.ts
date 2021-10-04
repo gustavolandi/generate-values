@@ -15,6 +15,8 @@ export class MenuComponent {
     isShowing = false;
     showSubSubMenu: boolean = false;
     appName = 'Value Generator';
+    selectedMenu = 1;
+
   
     mouseenter() {
       if (!this.isExpanded) {
@@ -26,5 +28,9 @@ export class MenuComponent {
       if (!this.isExpanded) {
         this.isShowing = false;
       }
+    }
+
+    selectMenu(selectedMenu : number) {
+        this.selectedMenu = selectedMenu;
     }
 }
