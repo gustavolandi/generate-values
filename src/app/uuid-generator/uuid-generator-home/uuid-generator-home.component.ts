@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import { UUIDGeneratorModule } from '../uuid-generator.module';
 import { Clipboard } from "@angular/cdk/clipboard"
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ExportExcel } from 'src/app/service/export-excel.service';
 
 export interface UuidGenerated {
 
@@ -21,7 +21,8 @@ export class UUIDGeneratorHome implements OnInit {
     generatedUuid : UuidGenerated[] = [];
     
     constructor(private clipboard: Clipboard,
-        private _snackBar: MatSnackBar){
+        private _snackBar: MatSnackBar,
+        private exportExcel: ExportExcel){
 
     }
 
@@ -43,5 +44,16 @@ export class UUIDGeneratorHome implements OnInit {
         };
         this.generatedUuid.push(uuidGenerated);
     }
+
+    exportUuid(){
+        const exportUuid : UuidGenerated[] = [];
+        for (let i=0;i<100;i++) {
+            exportUuid.push({
+                uuid : uuidv4()
+            });
+        }
+        this.exportExcel.generateExcel(exportUuid,'UUID-generate.xlsx');
+    }
+
   
 }

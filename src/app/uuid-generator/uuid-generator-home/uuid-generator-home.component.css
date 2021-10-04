@@ -2,8 +2,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+    text-align: center;
+}
 
-  .hand-click {
+.hand-click {
     cursor: pointer;
-  }
+}
+
+.uuid {
+    margin-top: 100px;
+    margin-left: 35%;
+}
