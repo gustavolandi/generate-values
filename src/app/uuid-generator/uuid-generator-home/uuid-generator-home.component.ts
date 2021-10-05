@@ -10,6 +10,11 @@ export interface UuidGenerated {
     uuid: string;
 }
 
+export interface FilesType {
+
+    type: string;
+}
+
 @Component({
   selector: 'uuid-generator-home',
   templateUrl: './uuid-generator-home.component.html',
@@ -18,13 +23,20 @@ export interface UuidGenerated {
 export class UUIDGeneratorHome implements OnInit {
 
     uuid = '';
-    exportValue: number = 0;
+    exportValue: number = 100;
     errorMessage = '';
     form: FormGroup = new FormGroup({
         exportValue: new FormControl('',[Validators.required,
             Validators.min(0),
             Validators.max(999)]),
     });
+    typeFile = 'xlsx';
+
+    typesFiles : FilesType[] = [
+        { type : 'xlsx'},
+        { type : 'csv' },
+        { type : 'txt' }
+    ];
 
     generatedUuid : UuidGenerated[] = [];
     
@@ -40,7 +52,7 @@ export class UUIDGeneratorHome implements OnInit {
 
     copyValue(){
         this.clipboard.copy(this.uuid);
-        this._snackBar.open('Copiado','',{
+        this._snackBar.open('Copied!','',{
             duration: 500
           });
     }
@@ -56,7 +68,7 @@ export class UUIDGeneratorHome implements OnInit {
     exportUuid(){
         this.errorMessage = '';
         if (this.exportValue == undefined || this.exportValue <= 0  || this.exportValue >= 1000) {
-            this.errorMessage = 'Digite um número entre 1 e 999';
+            this.errorMessage = 'Type a number between 1 and 999';
             return;
         }
         const exportUuid : UuidGenerated[] = [];
@@ -65,7 +77,13 @@ export class UUIDGeneratorHome implements OnInit {
                 uuid : uuidv4()
             });
         }
-        this.exportExcel.generateExcel(exportUuid,'UUID-generate.xlsx');
+        if (this.typeFile === 'xlsx') {
+            this.exportExcel.generateExcel(exportUuid,'UUID-generate.xlsx');
+        } else if (this.typeFile === 'csv') {
+            this.exportExcel.generateCsv(exportUuid,'UUID-generate.csv');
+        } else if (this.typeFile === 'txt') {
+            this.exportExcel.generateTxt(exportUuid,'UUID-generate.txt');
+        }
     }
 
   
