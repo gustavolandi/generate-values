@@ -1,5 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { MaterialModule } from '../material/material.module';
 import { UUIDGeneratorHome } from './uuid-generator-home/uuid-generator-home.component';
@@ -10,9 +12,12 @@ import { UUIDGeneratorHome } from './uuid-generator-home/uuid-generator-home.com
     UUIDGeneratorHome
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     MaterialModule,
-    ClipboardModule
+    ClipboardModule,
+    ReactiveFormsModule,
+    FormsModule,
   ],
   exports : [UUIDGeneratorHome],
   providers: [],

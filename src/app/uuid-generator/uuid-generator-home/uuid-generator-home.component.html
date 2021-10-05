@@ -1,20 +1,25 @@
 <div class="d-flex justify-content-center m-3">
     <h1>{{uuid}}</h1>
-    <div class="m-3 hand-click">
+    <div class="m-2 hand-click">
         <button mat-raised-button (click)="copyValue()" color="primary">Copy
             <mat-icon (click)="copyValue()">content_copy</mat-icon>
         </button>
     </div> 
 </div>
 
-<div class="m-3">
-    <button mat-raised-button (click)="generateNewUuid()" color="primary">Gerar UUID</button>
+<div class="d-flex justify-content-center m-3">
+    <button class="btn-generate" mat-raised-button (click)="generateNewUuid()" color="primary">Gerar UUID</button>
 </div>
 
 <mat-divider></mat-divider>
 
 <div class="m-3">
     <h3>Export UUID Excel</h3>
+</div>
+
+<div class="m-3">
+    <input type="number" placeholder="100" [(ngModel)]="exportValue">
+    <span style="margin-left: 10px; color: red">{{errorMessage}}</span>
 </div>
 
 <div class="m-3">
