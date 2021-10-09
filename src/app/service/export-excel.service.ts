@@ -13,7 +13,7 @@ export class ExportExcel {
 
     }
 
-    async exportFile(exportData : ExportExcelModel[], fileParams : FileParams) {
+    public async exportFile(exportData : ExportExcelModel[], fileParams : FileParams) {
         if (fileParams.fileType === 'xlsx') {
             this.generateExcel(exportData,fileParams);
         } else if (fileParams.fileType === 'csv') {
@@ -23,33 +23,21 @@ export class ExportExcel {
         }
     }
 
-    async generateExcel(exportData : ExportExcelModel[], fileParams : FileParams) {
-        let workbook = new Workbook();
-        let worksheet = workbook.addWorksheet(fileParams.worksheetName);
-        exportData.forEach(item => {
-            worksheet.addRow([item.firstColumn]);
-        });
-        worksheet.getColumn(1).width = fileParams.firstColumnSize;
-        workbook.xlsx.writeBuffer().then((data) => {
+    private async generateExcel(exportData : ExportExcelModel[], fileParams : FileParams) {
+        this.generateSheet(exportData,fileParams).xlsx.writeBuffer().then((data) => {
                 let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
                 fileSaver.saveAs(blob, fileParams.fileName + '.xlsx');
         });
     }
 
-    async generateCsv(exportData : ExportExcelModel[], fileParams : FileParams) {
-        let workbook = new Workbook();
-        let worksheet = workbook.addWorksheet(fileParams.worksheetName);
-        exportData.forEach(item => {
-            worksheet.addRow([item.firstColumn]);
-        });
-        worksheet.getColumn(1).width = fileParams.firstColumnSize;
-        workbook.csv.writeBuffer().then((data) => {
+    private async generateCsv(exportData : ExportExcelModel[], fileParams : FileParams) {
+        this.generateSheet(exportData,fileParams).csv.writeBuffer().then((data) => {
                 let blob = new Blob([data], { type: 'text/csv' });
                 fileSaver.saveAs(blob, fileParams.fileName + '.csv');
         });
     }
 
-    async generateTxt(exportData : ExportExcelModel[], fileParams : FileParams) {
+    private async generateTxt(exportData : ExportExcelModel[], fileParams : FileParams) {
         let data: string = '';
         exportData.forEach(item => 
             {
@@ -58,6 +46,16 @@ export class ExportExcel {
         data = data.substring(0,data.length - 1);
         const blob = new Blob([data], { type: 'application/octet-stream' });
         fileSaver.saveAs(blob, fileParams.fileName  + '.txt' );
+    }
+
+    private generateSheet(exportData : ExportExcelModel[], fileParams : FileParams) : Workbook {
+        let workbook = new Workbook();
+        let worksheet = workbook.addWorksheet(fileParams.worksheetName);
+        exportData.forEach(item => {
+            worksheet.addRow([item.firstColumn]);
+        });
+        worksheet.getColumn(1).width = fileParams.firstColumnSize;
+        return workbook;
     }
 
 }

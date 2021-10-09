@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportExcel } from 'src/app/service/export-excel.service';
 import { Clipboard } from "@angular/cdk/clipboard"
 import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
-import { ExportFilesType } from 'src/app/service/model/ExportFilesType';
 import { FileParams } from 'src/app/service/model/FileParams';
 
 const faker = require('faker');
@@ -23,16 +22,6 @@ export interface CpfDigits {
     cpfGenerated = '';
     errorCpf = '';
     cpfValid = '';
-
-    exportValue: number = 100;
-    typeFile = 'xlsx';
-    errorMessage = '';
-
-    typesFiles : ExportFilesType[] = [
-        { type : 'xlsx'},
-        { type : 'csv' },
-        { type : 'txt' }
-    ];
 
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,

@@ -3,9 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Clipboard } from "@angular/cdk/clipboard"
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportExcel } from 'src/app/service/export-excel.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
-import { ExportFilesType } from 'src/app/service/model/ExportFilesType';
 import { FileParams } from 'src/app/service/model/FileParams';
 
 @Component({
@@ -16,20 +14,6 @@ import { FileParams } from 'src/app/service/model/FileParams';
 export class UUIDGeneratorHome implements OnInit {
 
     uuid = '';
-    exportValue: number = 100;
-    errorMessage = '';
-    form: FormGroup = new FormGroup({
-        exportValue: new FormControl('',[Validators.required,
-            Validators.min(0),
-            Validators.max(999)]),
-    });
-    typeFile = 'xlsx';
-
-    typesFiles : ExportFilesType[] = [
-        { type : 'xlsx'},
-        { type : 'csv' },
-        { type : 'txt' }
-    ];
 
     constructor(private clipboard: Clipboard,
         private _snackBar: MatSnackBar,
