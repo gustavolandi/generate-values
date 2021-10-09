@@ -8,18 +8,10 @@
 
 			<div *ngFor="let menu of menuItens">
 				<mat-list-item (click)="selectMenu(menu.item)" class="parent">
-					<span class="full-width" *ngIf="isExpanded || isShowing">{{menu.fullName}}</span>
-					<span class="full-width" *ngIf="!(isExpanded || isShowing)">{{menu.name}}</span>
+					<span class="full-width" *ngIf="showFullName()">{{menu.fullName}}</span>
+					<span class="full-width" *ngIf="showName()">{{menu.name}}</span>
 				</mat-list-item>
 			</div>
-            <!-- <mat-list-item (click)="selectMenu(1)" class="parent">
-				<span class="full-width" *ngIf="isExpanded || isShowing">Generate UUID</span>
-				<span class="full-width" *ngIf="!(isExpanded || isShowing)">uuid</span>
-			</mat-list-item>
-			<mat-list-item (click)="selectMenu(2)" class="parent">
-				<span class="full-width" *ngIf="isExpanded || isShowing">Generate CPF</span>
-				<span class="full-width" *ngIf="!(isExpanded || isShowing)">cpf</span>
-			</mat-list-item> -->
 		</mat-nav-list>
 	</mat-sidenav>
 

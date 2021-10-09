@@ -51,4 +51,12 @@ export class MenuComponent {
     selectMenu(selectedMenu : number) {
         this.selectedMenu = selectedMenu;
     }
+
+    showFullName() {
+      return this.isExpanded || this.isShowing;
+    }
+
+    showName() {
+      return !(this.isExpanded || this.isShowing);
+    }
 }
