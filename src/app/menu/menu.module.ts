@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DocumentGeneratorModule } from '../document-generator/document-generator.module';
 import { MaterialModule } from '../material/material.module';
 import { UUIDGeneratorModule } from '../uuid-generator/uuid-generator.module';
 import { MenuComponent } from './menu.component';
@@ -21,7 +22,7 @@ import { MenuComponent } from './menu.component';
     MatNativeDateModule,
     ReactiveFormsModule,
     UUIDGeneratorModule,
-    MatFormFieldModule
+    DocumentGeneratorModule
   ],
   providers: [],
   bootstrap: [MenuComponent]

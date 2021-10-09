@@ -10,7 +10,6 @@ import { CPFGeneratorComponent } from './cpf-generator/cpf-generator.component';
 
 @NgModule({
   declarations: [
-    CNPJGeneratorComponent,
     CPFGeneratorComponent
   ],
   imports: [
@@ -22,9 +21,8 @@ import { CPFGeneratorComponent } from './cpf-generator/cpf-generator.component';
     FormsModule,
   ],
   exports : [    
-    CNPJGeneratorComponent,
     CPFGeneratorComponent
   ],
   providers: [],
 })
-export class DocumentGeneratorHome { }
+export class DocumentGeneratorModule { }
