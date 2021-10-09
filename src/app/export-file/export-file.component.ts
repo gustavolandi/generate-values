@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ExportFilesType } from 'src/app/service/model/ExportFilesType';
+import { FileParams } from '../service/model/FileParams';
 
 @Component({
   selector: 'export-file',
@@ -33,10 +34,11 @@ export class ExportFileComponent implements OnInit {
             this.errorMessage = 'Type a number between 1 and 999';
             return;
         }
-        this.submit.emit({
+        const fileParams : FileParams = {
             fileType : this.typeFile,
             exportItens : this.exportValue
-        });
+        };
+        this.submit.emit(fileParams);
     }
 
 

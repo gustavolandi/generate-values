@@ -4,6 +4,7 @@ import { ExportExcel } from 'src/app/service/export-excel.service';
 import { Clipboard } from "@angular/cdk/clipboard"
 import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
 import { ExportFilesType } from 'src/app/service/model/ExportFilesType';
+import { FileParams } from 'src/app/service/model/FileParams';
 
 const faker = require('faker');
 
@@ -98,15 +99,17 @@ export interface CpfDigits {
       }
     }
 
-    exportCpf(event: any){
-      console.log('exporting cpf...');
+    exportCpf(fileParams: FileParams){
       const exportCpf : ExportExcelModel[] = [];
-      for (let i=0;i<event.exportItens;i++) {
+      for (let i=0;i<fileParams.exportItens;i++) {
         exportCpf.push({
               firstColumn : this.generateCpf()
           });
       }
-      this.exportExcel.exportFile(exportCpf,'CPF-generate',event.fileType,'CPF');
+      fileParams.fileName = 'CPF-generate';
+      fileParams.worksheetName = 'CPF';
+      fileParams.firstColumnSize = 14;
+      this.exportExcel.exportFile(exportCpf,fileParams);
     }
       
 

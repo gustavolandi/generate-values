@@ -6,6 +6,7 @@ import { ExportExcel } from 'src/app/service/export-excel.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
 import { ExportFilesType } from 'src/app/service/model/ExportFilesType';
+import { FileParams } from 'src/app/service/model/FileParams';
 
 @Component({
   selector: 'uuid-generator-home',
@@ -50,14 +51,17 @@ export class UUIDGeneratorHome implements OnInit {
         this.uuid = uuidv4();
     }
 
-    exportUuid(event: any){
+    exportUuid(fileParams: FileParams){
         const exportUuid : ExportExcelModel[] = [];
-        for (let i=0;i<event.exportItens;i++) {
+        for (let i=0;i<fileParams.exportItens;i++) {
             exportUuid.push({
                 firstColumn : uuidv4()
             });
         }
-        this.exportExcel.exportFile(exportUuid,'UUID-generate',event.fileType,'UUID');
+        fileParams.fileName = 'UUID-generate';
+        fileParams.worksheetName = 'UUID';
+        fileParams.firstColumnSize = 37;
+        this.exportExcel.exportFile(exportUuid,fileParams);
     }
 
   
