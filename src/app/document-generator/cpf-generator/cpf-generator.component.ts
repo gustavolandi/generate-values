@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportExcel } from 'src/app/service/export-excel.service';
 import { Clipboard } from "@angular/cdk/clipboard"
-import { FilesType, UuidGenerated } from 'src/app/uuid-generator/uuid-generator-home/uuid-generator-home.component';
+import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
+import { ExportFilesType } from 'src/app/service/model/ExportFilesType';
 
 const faker = require('faker');
 
@@ -26,7 +27,7 @@ export interface CpfDigits {
     typeFile = 'xlsx';
     errorMessage = '';
 
-    typesFiles : FilesType[] = [
+    typesFiles : ExportFilesType[] = [
         { type : 'xlsx'},
         { type : 'csv' },
         { type : 'txt' }
@@ -35,7 +36,6 @@ export interface CpfDigits {
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,
       private exportExcel: ExportExcel){
-
     }
     
     ngOnInit(): void {
@@ -101,21 +101,21 @@ export interface CpfDigits {
     exportCpf(){
       this.errorMessage = '';
       if (this.exportValue == undefined || this.exportValue <= 0  || this.exportValue >= 1000) {
-          this.errorMessage = 'Type a number between 1 and 999';
+          this.errorMessage = 'Digite um número entre 1 and 999';
           return;
       }
-      const exportUuid : UuidGenerated[] = [];
+      const exportCpf : ExportExcelModel[] = [];
       for (let i=0;i<this.exportValue;i++) {
-          exportUuid.push({
-              uuid : this.generateCpf()
+        exportCpf.push({
+              firstColumn : this.generateCpf()
           });
       }
       if (this.typeFile === 'xlsx') {
-          this.exportExcel.generateExcel(exportUuid,'CPF-generate.xlsx');
+          this.exportExcel.generateExcel(exportCpf,'CPF-generate.xlsx');
       } else if (this.typeFile === 'csv') {
-          this.exportExcel.generateCsv(exportUuid,'CPF-generate.csv');
+          this.exportExcel.generateCsv(exportCpf,'CPF-generate.csv');
       } else if (this.typeFile === 'txt') {
-          this.exportExcel.generateTxt(exportUuid,'CPF-generate.txt');
+          this.exportExcel.generateTxt(exportCpf,'CPF-generate.txt');
       }
     }
       

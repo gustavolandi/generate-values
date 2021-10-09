@@ -4,16 +4,8 @@ import { Clipboard } from "@angular/cdk/clipboard"
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportExcel } from 'src/app/service/export-excel.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
-export interface UuidGenerated {
-
-    uuid: string;
-}
-
-export interface FilesType {
-
-    type: string;
-}
+import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
+import { ExportFilesType } from 'src/app/service/model/ExportFilesType';
 
 @Component({
   selector: 'uuid-generator-home',
@@ -32,18 +24,15 @@ export class UUIDGeneratorHome implements OnInit {
     });
     typeFile = 'xlsx';
 
-    typesFiles : FilesType[] = [
+    typesFiles : ExportFilesType[] = [
         { type : 'xlsx'},
         { type : 'csv' },
         { type : 'txt' }
     ];
 
-    generatedUuid : UuidGenerated[] = [];
-    
     constructor(private clipboard: Clipboard,
         private _snackBar: MatSnackBar,
         private exportExcel: ExportExcel){
-
     }
 
     ngOnInit(){
@@ -59,10 +48,6 @@ export class UUIDGeneratorHome implements OnInit {
 
     generateNewUuid(){
         this.uuid = uuidv4();
-        const uuidGenerated : UuidGenerated = {
-            uuid : this.uuid
-        };
-        this.generatedUuid.push(uuidGenerated);
     }
 
     exportUuid(){
@@ -71,10 +56,10 @@ export class UUIDGeneratorHome implements OnInit {
             this.errorMessage = 'Type a number between 1 and 999';
             return;
         }
-        const exportUuid : UuidGenerated[] = [];
+        const exportUuid : ExportExcelModel[] = [];
         for (let i=0;i<this.exportValue;i++) {
             exportUuid.push({
-                uuid : uuidv4()
+                firstColumn : uuidv4()
             });
         }
         if (this.typeFile === 'xlsx') {

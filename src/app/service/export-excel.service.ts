@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { UuidGenerated } from '../uuid-generator/uuid-generator-home/uuid-generator-home.component';
 import { Workbook } from 'exceljs';
 import * as fileSaver from 'file-saver';
+import { ExportExcelModel } from './model/ExportExcelModel';
 
 @Injectable({
     providedIn: 'root'
@@ -12,11 +12,11 @@ export class ExportExcel {
 
     }
 
-    async generateExcel(exportUuid : UuidGenerated[], fileName: string) {
+    async generateExcel(exportUuid : ExportExcelModel[], fileName: string) {
         let workbook = new Workbook();
         let worksheet = workbook.addWorksheet('UUID');
         exportUuid.forEach(item => {
-            worksheet.addRow([item.uuid]);
+            worksheet.addRow([item.firstColumn]);
         });
         worksheet.getColumn(1).width = 37;
         workbook.xlsx.writeBuffer().then((data) => {
@@ -25,11 +25,11 @@ export class ExportExcel {
         });
     }
 
-    async generateCsv(exportUuid : UuidGenerated[], fileName: string) {
+    async generateCsv(exportUuid : ExportExcelModel[], fileName: string) {
         let workbook = new Workbook();
         let worksheet = workbook.addWorksheet('UUID');
         exportUuid.forEach(item => {
-            worksheet.addRow([item.uuid]);
+            worksheet.addRow([item.firstColumn]);
         });
         worksheet.getColumn(1).width = 37;
         workbook.csv.writeBuffer().then((data) => {
@@ -38,11 +38,11 @@ export class ExportExcel {
         });
     }
 
-    async generateTxt(exportUuid : UuidGenerated[], fileName: string) {
+    async generateTxt(exportUuid : ExportExcelModel[], fileName: string) {
         let data: string = '';
         exportUuid.forEach(item => 
             {
-                data = data + item.uuid + '\n';
+                data = data + item.firstColumn + '\n';
             });
         data = data.substring(0,data.length - 1);
         const blob = new Blob([data], { type: 'application/octet-stream' });
