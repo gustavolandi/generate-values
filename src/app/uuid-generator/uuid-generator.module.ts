@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { ExportFileModule } from '../export-file/export-file.module';
 import { MaterialModule } from '../material/material.module';
 import { UUIDGeneratorHome } from './uuid-generator-home/uuid-generator-home.component';
 
@@ -18,6 +19,7 @@ import { UUIDGeneratorHome } from './uuid-generator-home/uuid-generator-home.com
     ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
+    ExportFileModule
   ],
   exports : [UUIDGeneratorHome],
   providers: [],

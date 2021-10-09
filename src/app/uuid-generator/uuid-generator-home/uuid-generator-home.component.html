@@ -16,29 +16,9 @@
 
 <mat-divider></mat-divider>
 
-<div class="m-3">
+ <div class="m-3">
     <h3>Export UUID</h3>
 </div>
 
-<div class="m-3">  
-    <mat-form-field class="field-full-width">
-        <mat-label>Select file type</mat-label>
-        <mat-select [(ngModel)]="typeFile">
-        <mat-option *ngFor="let file of typesFiles" [value]="file.type">
-            {{file.type}}
-        </mat-option>
-        </mat-select>
-    </mat-form-field>
-</div>
+<export-file (submit)="exportUuid($event)"></export-file>
 
-<div class="m-3">
-    <mat-form-field class="field-full-width">
-        <mat-label>Export quantity (between 1 and 999)</mat-label>
-        <input matInput type="number" placeholder="100" [(ngModel)]="exportValue">
-      </mat-form-field>
-    <span style="margin-left: 10px; color: red">{{errorMessage}}</span>
-</div>
-
-<div class="m-3">
-    <button mat-raised-button (click)="exportUuid()" color="primary">Export UUID File</button>    
-</div>

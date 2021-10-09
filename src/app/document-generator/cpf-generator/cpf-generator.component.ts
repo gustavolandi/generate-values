@@ -98,25 +98,15 @@ export interface CpfDigits {
       }
     }
 
-    exportCpf(){
-      this.errorMessage = '';
-      if (this.exportValue == undefined || this.exportValue <= 0  || this.exportValue >= 1000) {
-          this.errorMessage = 'Digite um número entre 1 and 999';
-          return;
-      }
+    exportCpf(event: any){
+      console.log('exporting cpf...');
       const exportCpf : ExportExcelModel[] = [];
-      for (let i=0;i<this.exportValue;i++) {
+      for (let i=0;i<event.exportItens;i++) {
         exportCpf.push({
               firstColumn : this.generateCpf()
           });
       }
-      if (this.typeFile === 'xlsx') {
-          this.exportExcel.generateExcel(exportCpf,'CPF-generate.xlsx');
-      } else if (this.typeFile === 'csv') {
-          this.exportExcel.generateCsv(exportCpf,'CPF-generate.csv');
-      } else if (this.typeFile === 'txt') {
-          this.exportExcel.generateTxt(exportCpf,'CPF-generate.txt');
-      }
+      this.exportExcel.exportFile(exportCpf,'CPF-generate',event.fileType,'CPF');
     }
       
 

@@ -50,25 +50,14 @@ export class UUIDGeneratorHome implements OnInit {
         this.uuid = uuidv4();
     }
 
-    exportUuid(){
-        this.errorMessage = '';
-        if (this.exportValue == undefined || this.exportValue <= 0  || this.exportValue >= 1000) {
-            this.errorMessage = 'Type a number between 1 and 999';
-            return;
-        }
+    exportUuid(event: any){
         const exportUuid : ExportExcelModel[] = [];
-        for (let i=0;i<this.exportValue;i++) {
+        for (let i=0;i<event.exportItens;i++) {
             exportUuid.push({
                 firstColumn : uuidv4()
             });
         }
-        if (this.typeFile === 'xlsx') {
-            this.exportExcel.generateExcel(exportUuid,'UUID-generate.xlsx');
-        } else if (this.typeFile === 'csv') {
-            this.exportExcel.generateCsv(exportUuid,'UUID-generate.csv');
-        } else if (this.typeFile === 'txt') {
-            this.exportExcel.generateTxt(exportUuid,'UUID-generate.txt');
-        }
+        this.exportExcel.exportFile(exportUuid,'UUID-generate',event.fileType,'UUID');
     }
 
   

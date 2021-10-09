@@ -1,29 +1,23 @@
-import { ClipboardModule } from '@angular/cdk/clipboard';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { ExportFileModule } from '../export-file/export-file.module';
 import { MaterialModule } from '../material/material.module';
-import { CPFGeneratorComponent } from './cpf-generator/cpf-generator.component';
+import { ExportFileComponent as ExportFileComponent } from './export-file.component';
 
 
 @NgModule({
   declarations: [
-    CPFGeneratorComponent
+    ExportFileComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     MaterialModule,
-    ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
-    ExportFileModule
   ],
-  exports : [    
-    CPFGeneratorComponent
-  ],
+  exports : [ExportFileComponent],
   providers: [],
 })
-export class DocumentGeneratorModule { }
+export class ExportFileModule { }
