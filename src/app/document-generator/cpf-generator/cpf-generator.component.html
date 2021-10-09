@@ -1,13 +1,18 @@
 <div class="d-flex justify-content-center m-3">
     <div class="teste-font">
-        {{cpfGenerated}}
+        {{cpfGenerated | cpfFormat}}
     </div>
 
     <div class="m-2 hand-click">
-        <button mat-raised-button (click)="copyValue()" color="primary">Copy
-            <mat-icon (click)="copyValue()">content_copy</mat-icon>
+        <button mat-raised-button (click)="copyValue(false)" color="primary">Copiar Número
+            <mat-icon (click)="copyValue(false)">content_copy</mat-icon>
         </button>
-    </div> 
+    </div>
+    <div class="m-2 hand-click">
+        <button mat-raised-button (click)="copyValue(true)" color="primary">Copiar Formatado
+            <mat-icon (click)="copyValue(true)">content_copy</mat-icon>
+        </button>
+    </div>  
 </div>
 
 <div class="d-flex justify-content-center m-3">

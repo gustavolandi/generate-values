@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { ExportFileModule } from '../export-file/export-file.module';
 import { MaterialModule } from '../material/material.module';
+import { SharedModule } from '../shared/shared.module';
 import { CPFGeneratorComponent } from './cpf-generator/cpf-generator.component';
 
 
@@ -19,7 +20,8 @@ import { CPFGeneratorComponent } from './cpf-generator/cpf-generator.component';
     ClipboardModule,
     ReactiveFormsModule,
     FormsModule,
-    ExportFileModule
+    ExportFileModule,
+    SharedModule
   ],
   exports : [    
     CPFGeneratorComponent

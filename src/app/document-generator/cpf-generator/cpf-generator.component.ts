@@ -4,6 +4,7 @@ import { ExportExcel } from 'src/app/service/export-excel.service';
 import { Clipboard } from "@angular/cdk/clipboard"
 import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
 import { FileParams } from 'src/app/service/model/FileParams';
+import { CpfPipe } from 'src/app/shared/pipes/cpf.pipe';
 
 const faker = require('faker');
 
@@ -25,17 +26,22 @@ export interface CpfDigits {
 
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,
-      private exportExcel: ExportExcel){
+      private exportExcel: ExportExcel,
+      private cpfPipe : CpfPipe){
     }
     
     ngOnInit(): void {
        this.generateCpf();
     }
 
-    copyValue(){
-      this.clipboard.copy(this.cpfGenerated);
-      this._snackBar.open('Copied!','',{
-          duration: 500
+    copyValue(format : boolean){
+      if (format) {
+        this.clipboard.copy(this.cpfPipe.transform(this.cpfGenerated));
+      } else {
+        this.clipboard.copy(this.cpfGenerated);
+      }
+      this._snackBar.open('Copiado!','',{
+          duration: 750
         });
     }
 
