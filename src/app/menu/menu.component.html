@@ -5,24 +5,27 @@
 <mat-sidenav-container class="example-container" autosize>
 	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
 		<mat-nav-list>
-			<mat-list-item (click)="selectMenu(1)" class="parent">
-				<span class="full-width" *ngIf="isExpanded || isShowing">Home</span>
-				<mat-icon mat-list-icon>home</mat-icon>
-			</mat-list-item>
-            <mat-list-item (click)="selectMenu(2)" class="parent">
+
+			<div *ngFor="let menu of menuItens">
+				<mat-list-item (click)="selectMenu(menu.item)" class="parent">
+					<span class="full-width" *ngIf="isExpanded || isShowing">{{menu.fullName}}</span>
+					<span class="full-width" *ngIf="!(isExpanded || isShowing)">{{menu.name}}</span>
+				</mat-list-item>
+			</div>
+            <!-- <mat-list-item (click)="selectMenu(1)" class="parent">
 				<span class="full-width" *ngIf="isExpanded || isShowing">Generate UUID</span>
 				<span class="full-width" *ngIf="!(isExpanded || isShowing)">uuid</span>
 			</mat-list-item>
-			<mat-list-item (click)="selectMenu(3)" class="parent">
+			<mat-list-item (click)="selectMenu(2)" class="parent">
 				<span class="full-width" *ngIf="isExpanded || isShowing">Generate CPF</span>
 				<span class="full-width" *ngIf="!(isExpanded || isShowing)">cpf</span>
-			</mat-list-item>
+			</mat-list-item> -->
 		</mat-nav-list>
 	</mat-sidenav>
 
 	<div class="example-sidenav-content">
-		<uuid-generator-home *ngIf="selectedMenu === 2"></uuid-generator-home>
-		<cpf-generator *ngIf="selectedMenu === 3"></cpf-generator>
+		<uuid-generator-home *ngIf="selectedMenu === 1"></uuid-generator-home>
+		<cpf-generator *ngIf="selectedMenu === 2"></cpf-generator>
 	</div>
 
 </mat-sidenav-container>
