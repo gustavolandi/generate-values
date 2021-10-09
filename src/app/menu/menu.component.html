@@ -16,8 +16,7 @@
 	</mat-sidenav>
 
 	<div class="example-sidenav-content">
-		<uuid-generator-home *ngIf="selectedMenu === 1"></uuid-generator-home>
-		<cpf-generator *ngIf="selectedMenu === 2"></cpf-generator>
+		<menu-itens [selectedMenu]="this.selectedMenu"></menu-itens>
 	</div>
 
 </mat-sidenav-container>
