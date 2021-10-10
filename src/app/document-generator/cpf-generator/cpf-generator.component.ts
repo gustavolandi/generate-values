@@ -1,17 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportExcel } from 'src/app/service/export-excel.service';
-import { Clipboard } from "@angular/cdk/clipboard"
+import { Clipboard } from '@angular/cdk/clipboard'
 import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
 import { FileParams } from 'src/app/service/model/FileParams';
 import { CpfPipe } from 'src/app/shared/pipes/cpf.pipe';
+import { DocumentDigits } from '../DocumentDigits';
 
 const faker = require('faker');
-
-export interface CpfDigits {
-  firstDigit : string;
-  secondDigit : string;
-}
 
 @Component({
     selector: 'cpf-generator',
@@ -63,7 +59,7 @@ export interface CpfDigits {
       return this.cpfGenerated;
     }
 
-    calculateDigitsCpf(cpf : string) : CpfDigits {
+    calculateDigitsCpf(cpf : string) : DocumentDigits {
       const cpfArray = cpf.split('');
       let sumFirstDigit = 0, sumSecondDigit = 0;
       for (let i=0;i<9;i++) {

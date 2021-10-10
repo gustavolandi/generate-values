@@ -6,12 +6,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ExportFileModule } from '../export-file/export-file.module';
 import { MaterialModule } from '../material/material.module';
 import { SharedModule } from '../shared/shared.module';
+import { CNPJGeneratorComponent } from './cnpj-generator/cnpj-generator.component';
 import { CPFGeneratorComponent } from './cpf-generator/cpf-generator.component';
 
 
 @NgModule({
   declarations: [
-    CPFGeneratorComponent
+    CPFGeneratorComponent,
+    CNPJGeneratorComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { CPFGeneratorComponent } from './cpf-generator/cpf-generator.component';
     SharedModule
   ],
   exports : [    
-    CPFGeneratorComponent
+    CPFGeneratorComponent,
+    CNPJGeneratorComponent
   ],
   providers: [],
 })

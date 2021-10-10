@@ -15,4 +15,9 @@ export const MENU_ITENS : MenuItem[] = [
       fullName : 'Generate CPF',
       item : 2
     },
+    {
+      name : 'cnpj',
+      fullName : 'Generate CNPJ',
+      item : 3
+    },
   ];
