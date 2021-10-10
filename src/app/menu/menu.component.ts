@@ -1,4 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
+import { MediaMatcher } from '@angular/cdk/layout';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MENU_ITENS } from './list-menu';
 
@@ -9,7 +10,7 @@ import { MENU_ITENS } from './list-menu';
 })
 export class MenuComponent {
     @ViewChild(MatSidenav)
-    sidenav!: MatSidenav;
+    snav!: MatSidenav;
    
     isExpanded = true;
     showSubmenu: boolean = false;
@@ -18,28 +19,27 @@ export class MenuComponent {
     appName = 'Value Generator';
     selectedMenu = 1;
     menuItens = MENU_ITENS;
-  
-    mouseenter() {
-      if (!this.isExpanded) {
-        this.isShowing = true;
-      }
-    }
-  
-    mouseleave() {
-      if (!this.isExpanded) {
-        this.isShowing = false;
-      }
+    mobileQuery: MediaQueryList;
+    menuTitleSelected = '';
+
+    private _mobileQueryListener: () => void;
+      
+    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+      this.mobileQuery = media.matchMedia('(max-width: 600px)');
+      this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+      this.mobileQuery.addListener(this._mobileQueryListener);
     }
 
+    ngOnInit(){
+      this.menuTitleSelected = MENU_ITENS[0].fullName;
+    }
+
+    ngOnDestroy(): void {
+      this.mobileQuery.removeListener(this._mobileQueryListener);
+    }
+  
     selectMenu(selectedMenu : number) {
         this.selectedMenu = selectedMenu;
-    }
-
-    showFullName() {
-      return this.isExpanded || this.isShowing;
-    }
-
-    showName() {
-      return !(this.isExpanded || this.isShowing);
+        this.menuTitleSelected = this.menuItens[this.selectedMenu-1].fullName;
     }
 }

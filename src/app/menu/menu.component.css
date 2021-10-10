@@ -1,38 +1,26 @@
-.example-container {
-    height: 500px;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-  }
-  .example-sidenav-content {
-    height: 100%;
-  }
-  .example-sidenav {
-     user-select: none;
-  }
   .full-width {
     width: 100%;
   }
-  .menu-button {
-    transition: 300ms ease-in-out;
-    transform: rotate(0deg);
-  }
-  .menu-button.rotated {
-    transform: rotate(180deg);
-  }
-  .submenu {
-    overflow-y: hidden;
-    transition: transform 300ms ease;
-    transform: scaleY(0);
-    transform-origin: top;
-    padding-left: 30px;
-  }
-  .submenu.expanded {
-    transform: scaleY(1);
+  
+  .example-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
   }
 
-  mat-sidenav-container {
+  .example-is-mobile .example-toolbar {
     position: fixed;
-    height: 100%;
-    min-height: 100%;
-    width: 100%;
-    min-width: 100%;
- }
+    z-index: 2;
+  }
+
+  .example-sidenav-container {
+    flex: 1;
+  }
+
+  .example-is-mobile .example-sidenav-container {
+    flex: 1 0 auto;
+  }

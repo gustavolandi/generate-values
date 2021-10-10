@@ -1,22 +1,29 @@
-<mat-toolbar color="primary" class="example-toolbar">
-	<button mat-icon-button (click)="isExpanded = !isExpanded"><mat-icon>menu</mat-icon></button>
-	<h1 class="example-app-name">{{appName}}</h1>
-</mat-toolbar>
-<mat-sidenav-container class="example-container" autosize>
-	<mat-sidenav #sidenav class="example-sidenav" mode="side" opened="true" (mouseenter)="mouseenter()" (mouseleave)="mouseleave()">
-		<mat-nav-list>
-
-			<div *ngFor="let menu of menuItens">
-				<mat-list-item (click)="selectMenu(menu.item)" class="parent">
-					<span class="full-width" *ngIf="showFullName()">{{menu.fullName}}</span>
-					<span class="full-width" *ngIf="showName()">{{menu.name}}</span>
-				</mat-list-item>
-			</div>
-		</mat-nav-list>
-	</mat-sidenav>
-
-	<div class="example-sidenav-content">
+<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+	<mat-toolbar color="primary" class="example-toolbar">
+	  <button mat-icon-button (click)="snav.toggle()"><mat-icon>menu</mat-icon></button>
+	  <h1 class="example-app-name">{{appName}}</h1>
+	</mat-toolbar>
+	<mat-toolbar color="primary" class="example-toolbar" *ngIf="!mobileQuery.matches">
+		<h1 class="example-app-name">{{menuTitleSelected}}</h1>
+	  </mat-toolbar>
+	
+  
+	<mat-sidenav-container class="example-sidenav-container"
+						   [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+	  <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+				   [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+				   <mat-nav-list>
+	
+					<div *ngFor="let menu of menuItens">
+						<mat-list-item (click)="selectMenu(menu.item);snav.toggle()" class="parent">
+							<span class="full-width">{{menu.fullName}}</span>
+						</mat-list-item>
+					</div>
+				</mat-nav-list>
+	  </mat-sidenav>
+  
+	  <mat-sidenav-content>
 		<menu-itens [selectedMenu]="this.selectedMenu"></menu-itens>
-	</div>
-
-</mat-sidenav-container>
+	  </mat-sidenav-content>
+	</mat-sidenav-container>
+  </div>

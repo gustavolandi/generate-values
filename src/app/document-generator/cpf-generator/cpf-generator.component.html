@@ -2,7 +2,10 @@
     <div class="teste-font">
         {{cpfGenerated | cpfFormat}}
     </div>
+</div>
 
+
+<div class="d-flex justify-content-center m-3">
     <div class="m-2 hand-click">
         <button mat-raised-button (click)="copyValue(false)" color="primary">Copiar Número
             <mat-icon (click)="copyValue(false)">content_copy</mat-icon>
@@ -42,7 +45,14 @@
     <h3>Exporta CPF</h3>
 </div>
 
+<div class="m-3">
+    <mat-radio-group [(ngModel)]="formatCpf">
+        <div *ngFor="let format of formats">
+            <mat-radio-button class="m-2"  [value]="format.id">
+                {{format.text}}
+            </mat-radio-button>
+        </div>
+    </mat-radio-group>
+</div>
+
 <export-file (submit)="exportCpf($event)"></export-file>
-
-
-

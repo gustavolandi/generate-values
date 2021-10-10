@@ -23,6 +23,8 @@ export interface CpfDigits {
     cpfGenerated = '';
     errorCpf = '';
     cpfValid = '';
+    formatCpf = 1;
+    formats = [{text: 'Formatado', id : 1 }, {text: 'Apenas Números', id: 2}];
 
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,
@@ -96,10 +98,18 @@ export interface CpfDigits {
 
     exportCpf(fileParams: FileParams){
       const exportCpf : ExportExcelModel[] = [];
-      for (let i=0;i<fileParams.exportItens;i++) {
-        exportCpf.push({
-              firstColumn : this.generateCpf()
-          });
+      if (this.formatCpf === 1) {
+        for (let i=0;i<fileParams.exportItens;i++) {
+          exportCpf.push({
+                firstColumn : this.cpfPipe.transform(this.generateCpf())
+            });
+        }
+      } else {
+        for (let i=0;i<fileParams.exportItens;i++) {
+          exportCpf.push({
+                firstColumn : this.generateCpf()
+            });
+        }
       }
       fileParams.fileName = 'CPF-generate';
       fileParams.worksheetName = 'CPF';
