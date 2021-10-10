@@ -32,7 +32,7 @@
 <div class="m-3">
     <mat-form-field class="field-full-width">
         <mat-label>Digite um CNPJ para validar</mat-label>
-        <input matInput (input)="validateCnpj($event)">
+        <input matInput cnpjMask [(ngModel)]="cnpjToValidate" (input)="validateCnpj()">
       </mat-form-field>
     <span class="error-text">{{errorCnpj}}</span>
     <span class="validate-text">{{cnpjValid}}</span>

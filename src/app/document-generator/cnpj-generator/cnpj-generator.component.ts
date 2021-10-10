@@ -21,6 +21,7 @@ const DIGITS_CNPJ = '0001';
     cnpjGenerated = '';
     errorCnpj = '';
     cnpjValid = '';
+    cnpjToValidate = '';
     formatCnpj = 1;
     formats = [{text: 'Formatado', id : 1 }, {text: 'Apenas Números', id: 2}];
 
@@ -92,8 +93,8 @@ const DIGITS_CNPJ = '0001';
       };
     }
 
-    validateCnpj(event : any) {
-      const cnpj : string = event != null && event != undefined ? event.target.value : '';
+    validateCnpj() {
+      const cnpj = this.cnpjToValidate.replace(/[^0-9]/g,'');
       this.errorCnpj = '';
       this.cnpjValid = '';
       if (cnpj.length == 14) {
