@@ -49,12 +49,15 @@ export interface CpfDigits {
 
     generateCpf() {
       let cpfRandom = '';
-      for (let i=0;i<9;i++) {
+      while (this.validateDigitsEquals(cpfRandom)) {
+        cpfRandom = '';
+        for (let i=0;i<9;i++) {
           cpfRandom += faker.datatype.number({
             'min': 0,
             'max': 9
         }).toString();
       }
+    }
       const cpfDigits = this.calculateDigitsCpf(cpfRandom);
       this.cpfGenerated = cpfRandom + cpfDigits.firstDigit.toString() + cpfDigits.secondDigit.toString();
       return this.cpfGenerated;
@@ -83,17 +86,25 @@ export interface CpfDigits {
     }
 
     validateCpf(event : any) {
-      const cpf = event != null && event != undefined ? event.target.value : '';
+      const cpf : string = event != null && event != undefined ? event.target.value : '';
       this.errorCpf = '';
       this.cpfValid = '';
       if (cpf.length == 11) {
-        const cpfDigits = this.calculateDigitsCpf(cpf);
-        if (cpf.substring(9,10) === cpfDigits.firstDigit.toString() && cpf.substring(10,11) === cpfDigits.secondDigit.toString()){
-          this.cpfValid = 'CPF Válido';
-        } else {
+        if (this.validateDigitsEquals(cpf)){
           this.errorCpf = 'CPF Inválido';
+        } else {
+          const cpfDigits = this.calculateDigitsCpf(cpf);
+          if (cpf.substring(9,10) === cpfDigits.firstDigit.toString() && cpf.substring(10,11) === cpfDigits.secondDigit.toString()){
+            this.cpfValid = 'CPF Válido';
+          } else {
+            this.errorCpf = 'CPF Inválido';
+          }
         }
       }
+    }
+
+    validateDigitsEquals(cpf: string) : boolean {
+        return cpf.split('').every(char => char === cpf[0]);
     }
 
     exportCpf(fileParams: FileParams){
