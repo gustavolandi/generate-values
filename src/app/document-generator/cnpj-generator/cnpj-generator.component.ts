@@ -93,15 +93,15 @@ const DIGITS_CNPJ = '0001';
     }
 
     validateCnpj(event : any) {
-      const cpf : string = event != null && event != undefined ? event.target.value : '';
+      const cnpj : string = event != null && event != undefined ? event.target.value : '';
       this.errorCnpj = '';
       this.cnpjValid = '';
-      if (cpf.length == 11) {
-        if (this.validateDigitsEquals(cpf)){
+      if (cnpj.length == 14) {
+        if (this.validateDigitsEquals(cnpj)){
           this.errorCnpj = 'CNPJ Inválido';
         } else {
-          const cpfDigits = this.calculateDigitsCnpj(cpf);
-          if (cpf.substring(9,10) === cpfDigits.firstDigit.toString() && cpf.substring(10,11) === cpfDigits.secondDigit.toString()){
+          const cpfDigits = this.calculateDigitsCnpj(cnpj);
+          if (cnpj.substring(12,13) === cpfDigits.firstDigit.toString() && cnpj.substring(13,14) === cpfDigits.secondDigit.toString()){
             this.cnpjValid = 'CNPJ Válido';
           } else {
             this.errorCnpj = 'CNPJ Inválido';
