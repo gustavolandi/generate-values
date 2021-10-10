@@ -8,6 +8,6 @@ import { CnpjPipe } from './pipes/cnpj.pipe';
     declarations: [ CpfPipe,CnpjPipe,CpfMaskDirective, ],
     imports: [ CommonModule ],
     exports: [ CpfMaskDirective, CpfPipe, CnpjPipe ],
-    providers: [ CpfPipe, CnpjPipe ],
+    providers: [ CpfPipe, CnpjPipe, CpfMaskDirective ],
 })
 export class SharedModule {}

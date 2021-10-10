@@ -17,7 +17,7 @@ export class CpfMaskDirective {
   @HostListener('ngModelChange')
   onChange() {
     let text = (this.el.nativeElement as HTMLInputElement).value.trim();
-    if (!text.match(/^[0-9-.]*$/)) {
+    if (!text.match(/^[0-9-.]*$/) || text.length >= 15) {
         text = this.oldValue;
     } else {
         if (this.oldValue.length > text.length) {

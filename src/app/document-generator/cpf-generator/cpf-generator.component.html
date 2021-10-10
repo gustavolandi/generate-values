@@ -32,7 +32,8 @@
 <div class="m-3">
     <mat-form-field class="field-full-width">
         <mat-label>Digite um CPF para validar</mat-label>
-        <input matInput (input)="validateCpf($event)">
+        <input matInput cpfMask [(ngModel)]="teste" (input)="validateCpf($event)">
+        <!-- <input matInput cpfMask ([ngModel])="teste" (input)="validateCpf($event)"> -->
       </mat-form-field>
     <span class="error-text">{{errorCpf}}</span>
     <span class="validate-text">{{cpfValid}}</span>

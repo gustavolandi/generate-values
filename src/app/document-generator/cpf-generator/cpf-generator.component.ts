@@ -20,6 +20,7 @@ const faker = require('faker');
     errorCpf = '';
     cpfValid = '';
     formatCpf = 1;
+    teste = '';
     formats = [{text: 'Formatado', id : 1 }, {text: 'Apenas Números', id: 2}];
 
     constructor(private clipboard: Clipboard,
@@ -82,7 +83,9 @@ const faker = require('faker');
     }
 
     validateCpf(event : any) {
-      const cpf : string = event != null && event != undefined ? event.target.value : '';
+      // const cpf : string = event != null && event != undefined ? event.target.value : '';
+      const cpf = this.teste.replace('.','').replace('.','').replace('-','');
+      console.log(cpf);
       this.errorCpf = '';
       this.cpfValid = '';
       if (cpf.length == 11) {
