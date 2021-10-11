@@ -6,8 +6,7 @@ import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
 import { FileParams } from 'src/app/service/model/FileParams';
 import { CpfPipe } from 'src/app/shared/pipes/cpf.pipe';
 import { DocumentDigits } from '../DocumentDigits';
-
-const faker = require('faker');
+import { FakerService } from 'src/app/service/faker.service';
 
 @Component({
     selector: 'cpf-generator',
@@ -26,7 +25,8 @@ const faker = require('faker');
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,
       private exportExcel: ExportExcel,
-      private cpfPipe : CpfPipe){
+      private cpfPipe : CpfPipe,
+      private fakerService : FakerService){
     }
     
     ngOnInit(): void {
@@ -49,10 +49,7 @@ const faker = require('faker');
       while (this.validateDigitsEquals(cpfRandom)) {
         cpfRandom = '';
         for (let i=0;i<9;i++) {
-          cpfRandom += faker.datatype.number({
-            'min': 0,
-            'max': 9
-        }).toString();
+          cpfRandom += this.fakerService.generateNumber(0,9);
       }
     }
       const cpfDigits = this.calculateDigitsCpf(cpfRandom);

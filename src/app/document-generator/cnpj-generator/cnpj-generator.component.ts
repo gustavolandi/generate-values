@@ -6,10 +6,9 @@ import { FileParams } from 'src/app/service/model/FileParams';
 import { Clipboard } from '@angular/cdk/clipboard'
 import { DocumentDigits } from '../DocumentDigits';
 import { CnpjPipe } from 'src/app/shared/pipes/cnpj.pipe';
+import { FakerService } from 'src/app/service/faker.service';
 
-const faker = require('faker');
 const DIGITS_CNPJ = '0001';
-
 
 @Component({
     selector: 'cnpj-generator',
@@ -28,7 +27,8 @@ const DIGITS_CNPJ = '0001';
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,
       private exportExcel: ExportExcel,
-      private cnpjPipe : CnpjPipe){
+      private cnpjPipe : CnpjPipe,
+      private fakerService : FakerService){
     }
     
     ngOnInit(): void {
@@ -51,10 +51,7 @@ const DIGITS_CNPJ = '0001';
       while (this.validateDigitsEquals(cnpjRandom)) {
         cnpjRandom = '';
         for (let i=0;i<8;i++) {
-          cnpjRandom += faker.datatype.number({
-            'min': 0,
-            'max': 9
-          }).toString();
+          cnpjRandom += this.fakerService.generateNumber(0,9);
         }
       }
       cnpjRandom += DIGITS_CNPJ;
