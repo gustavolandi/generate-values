@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
-import { Clipboard } from "@angular/cdk/clipboard"
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportFileService } from 'src/app/service/export-file.service';
 import { ExportFileModel } from 'src/app/service/model/ExportFileModel';
 import { FileParams } from 'src/app/service/model/FileParams';
+import { SharedService } from 'src/app/service/shared.service';
 
 @Component({
   selector: 'uuid-generator-home',
@@ -15,9 +14,8 @@ export class UUIDGeneratorHome implements OnInit {
 
     uuid = '';
 
-    constructor(private clipboard: Clipboard,
-        private _snackBar: MatSnackBar,
-        private exportExcel: ExportFileService){
+    constructor(private sharedService: SharedService,
+        private exportFileService: ExportFileService){
     }
 
     ngOnInit(){
@@ -25,10 +23,7 @@ export class UUIDGeneratorHome implements OnInit {
     }
 
     copyValue(){
-        this.clipboard.copy(this.uuid);
-        this._snackBar.open('Copied!','',{
-            duration: 500
-          });
+        this.sharedService.copyValue(this.uuid);
     }
 
     generateNewUuid(){
@@ -45,7 +40,7 @@ export class UUIDGeneratorHome implements OnInit {
         fileParams.fileName = 'UUID-generate';
         fileParams.worksheetName = 'UUID';
         fileParams.firstColumnSize = 37;
-        this.exportExcel.exportFile(exportUuid,fileParams);
+        this.exportFileService.exportFile(exportUuid,fileParams);
     }
 
   

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportFileService } from 'src/app/service/export-file.service';
-import { Clipboard } from '@angular/cdk/clipboard'
 import { ExportFileModel } from 'src/app/service/model/ExportFileModel';
 import { FileParams } from 'src/app/service/model/FileParams';
 import { CpfPipe } from 'src/app/shared/pipes/cpf.pipe';
 import { DocumentDigits } from '../DocumentDigits';
 import { FakerService } from 'src/app/service/faker.service';
+import { SharedService } from 'src/app/service/shared.service';
 
 @Component({
     selector: 'cpf-generator',
@@ -22,11 +21,10 @@ import { FakerService } from 'src/app/service/faker.service';
     cpfToValidate = '';
     formats = [{text: 'Formatado', id : 1 }, {text: 'Apenas Números', id: 2}];
 
-    constructor(private clipboard: Clipboard,
-      private _snackBar: MatSnackBar,
-      private exportExcel: ExportFileService,
+    constructor(private exportFileService: ExportFileService,
       private cpfPipe : CpfPipe,
-      private fakerService : FakerService){
+      private fakerService : FakerService,
+      private sharedService : SharedService){
     }
     
     ngOnInit(): void {
@@ -35,18 +33,15 @@ import { FakerService } from 'src/app/service/faker.service';
 
     copyValue(format : boolean){
       if (format) {
-        this.clipboard.copy(this.cpfPipe.transform(this.cpfGenerated));
+        this.sharedService.copyValue(this.cpfPipe.transform(this.cpfGenerated));
       } else {
-        this.clipboard.copy(this.cpfGenerated);
+        this.sharedService.copyValue(this.cpfGenerated);
       }
-      this._snackBar.open('Copiado!','',{
-          duration: 750
-        });
     }
 
     generateCpf() {
       let cpfRandom = '';
-      while (this.validateDigitsEquals(cpfRandom)) {
+      while (this.sharedService.validateDigitsEquals(cpfRandom)) {
         cpfRandom = '';
         for (let i=0;i<9;i++) {
           cpfRandom += this.fakerService.generateNumber(0,9);
@@ -84,7 +79,7 @@ import { FakerService } from 'src/app/service/faker.service';
       this.errorCpf = '';
       this.cpfValid = '';
       if (cpf.length == 11) {
-        if (this.validateDigitsEquals(cpf)){
+        if (this.sharedService.validateDigitsEquals(cpf)){
           this.errorCpf = 'CPF Inválido';
         } else {
           const cpfDigits = this.calculateDigitsCpf(cpf);
@@ -95,10 +90,6 @@ import { FakerService } from 'src/app/service/faker.service';
           }
         }
       }
-    }
-
-    validateDigitsEquals(cpf: string) : boolean {
-        return cpf.split('').every(char => char === cpf[0]);
     }
 
     exportCpf(fileParams: FileParams){
@@ -119,8 +110,7 @@ import { FakerService } from 'src/app/service/faker.service';
       fileParams.fileName = 'CPF-generate';
       fileParams.worksheetName = 'CPF';
       fileParams.firstColumnSize = 14;
-      this.exportExcel.exportFile(exportCpf,fileParams);
-    }
-      
+      this.exportFileService.exportFile(exportCpf,fileParams);
+    }  
 
   }

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExportFileService } from 'src/app/service/export-file.service';
 import { ExportFileModel } from 'src/app/service/model/ExportFileModel';
 import { FileParams } from 'src/app/service/model/FileParams';
-import { Clipboard } from '@angular/cdk/clipboard'
 import { DocumentDigits } from '../DocumentDigits';
 import { CnpjPipe } from 'src/app/shared/pipes/cnpj.pipe';
 import { FakerService } from 'src/app/service/faker.service';
+import { SharedService } from 'src/app/service/shared.service';
 
 const DIGITS_CNPJ = '0001';
 
@@ -24,11 +23,10 @@ const DIGITS_CNPJ = '0001';
     formatCnpj = 1;
     formats = [{text: 'Formatado', id : 1 }, {text: 'Apenas Números', id: 2}];
 
-    constructor(private clipboard: Clipboard,
-      private _snackBar: MatSnackBar,
-      private exportExcel: ExportFileService,
+    constructor(private exportFileService: ExportFileService,
       private cnpjPipe : CnpjPipe,
-      private fakerService : FakerService){
+      private fakerService : FakerService,
+      private sharedService : SharedService){
     }
     
     ngOnInit(): void {
@@ -37,18 +35,15 @@ const DIGITS_CNPJ = '0001';
 
     copyValue(format : boolean){
       if (format) {
-        this.clipboard.copy(this.cnpjPipe.transform(this.cnpjGenerated));
+        this.sharedService.copyValue(this.cnpjPipe.transform(this.cnpjGenerated));
       } else {
-        this.clipboard.copy(this.cnpjGenerated);
+        this.sharedService.copyValue(this.cnpjGenerated);
       }
-      this._snackBar.open('Copiado!','',{
-          duration: 750
-        });
     }
 
     generateCnpj() {
       let cnpjRandom = '';
-      while (this.validateDigitsEquals(cnpjRandom)) {
+      while (this.sharedService.validateDigitsEquals(cnpjRandom)) {
         cnpjRandom = '';
         for (let i=0;i<8;i++) {
           cnpjRandom += this.fakerService.generateNumber(0,9);
@@ -95,7 +90,7 @@ const DIGITS_CNPJ = '0001';
       this.errorCnpj = '';
       this.cnpjValid = '';
       if (cnpj.length == 14) {
-        if (this.validateDigitsEquals(cnpj)){
+        if (this.sharedService.validateDigitsEquals(cnpj)){
           this.errorCnpj = 'CNPJ Inválido';
         } else {
           const cpfDigits = this.calculateDigitsCnpj(cnpj);
@@ -106,10 +101,6 @@ const DIGITS_CNPJ = '0001';
           }
         }
       }
-    }
-
-    validateDigitsEquals(cnpj: string) : boolean {
-        return cnpj.split('').every(char => char === cnpj[0]);
     }
 
     exportCnpj(fileParams: FileParams){
@@ -130,7 +121,7 @@ const DIGITS_CNPJ = '0001';
       fileParams.fileName = 'CNPJ-generate';
       fileParams.worksheetName = 'CNPJ';
       fileParams.firstColumnSize = 14;
-      this.exportExcel.exportFile(exportCnpj,fileParams);
+      this.exportFileService.exportFile(exportCnpj,fileParams);
     }
 
   }
