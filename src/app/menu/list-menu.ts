@@ -20,4 +20,9 @@ export const MENU_ITENS : MenuItem[] = [
       fullName : 'Generate CNPJ',
       item : 3
     },
+    {
+      name : 'base64',
+      fullName : 'Base64',
+      item : 4
+    },
   ];

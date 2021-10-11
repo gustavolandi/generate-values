@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { Base64Module } from '../base-64/base-64.module';
 import { DocumentGeneratorModule } from '../document-generator/document-generator.module';
 import { MaterialModule } from '../material/material.module';
 import { UUIDGeneratorModule } from '../uuid-generator/uuid-generator.module';
@@ -22,7 +23,8 @@ import { MenuComponent } from './menu.component';
     MatNativeDateModule,
     ReactiveFormsModule,
     UUIDGeneratorModule,
-    DocumentGeneratorModule
+    DocumentGeneratorModule,
+    Base64Module
   ],
   providers: [],
   bootstrap: [MenuComponent]
