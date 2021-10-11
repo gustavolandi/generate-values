@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { Clipboard } from "@angular/cdk/clipboard"
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ExportExcel } from 'src/app/service/export-excel.service';
-import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
+import { ExportFileService } from 'src/app/service/export-file.service';
+import { ExportFileModel } from 'src/app/service/model/ExportFileModel';
 import { FileParams } from 'src/app/service/model/FileParams';
 
 @Component({
@@ -17,7 +17,7 @@ export class UUIDGeneratorHome implements OnInit {
 
     constructor(private clipboard: Clipboard,
         private _snackBar: MatSnackBar,
-        private exportExcel: ExportExcel){
+        private exportExcel: ExportFileService){
     }
 
     ngOnInit(){
@@ -36,7 +36,7 @@ export class UUIDGeneratorHome implements OnInit {
     }
 
     exportUuid(fileParams: FileParams){
-        const exportUuid : ExportExcelModel[] = [];
+        const exportUuid : ExportFileModel[] = [];
         for (let i=0;i<fileParams.exportItens;i++) {
             exportUuid.push({
                 firstColumn : uuidv4()

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ExportExcel } from 'src/app/service/export-excel.service';
+import { ExportFileService } from 'src/app/service/export-file.service';
 import { Clipboard } from '@angular/cdk/clipboard'
-import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
+import { ExportFileModel } from 'src/app/service/model/ExportFileModel';
 import { FileParams } from 'src/app/service/model/FileParams';
 import { CpfPipe } from 'src/app/shared/pipes/cpf.pipe';
 import { DocumentDigits } from '../DocumentDigits';
@@ -24,7 +24,7 @@ import { FakerService } from 'src/app/service/faker.service';
 
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,
-      private exportExcel: ExportExcel,
+      private exportExcel: ExportFileService,
       private cpfPipe : CpfPipe,
       private fakerService : FakerService){
     }
@@ -102,7 +102,7 @@ import { FakerService } from 'src/app/service/faker.service';
     }
 
     exportCpf(fileParams: FileParams){
-      const exportCpf : ExportExcelModel[] = [];
+      const exportCpf : ExportFileModel[] = [];
       if (this.formatCpf === 1) {
         for (let i=0;i<fileParams.exportItens;i++) {
           exportCpf.push({

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ExportExcel } from 'src/app/service/export-excel.service';
-import { ExportExcelModel } from 'src/app/service/model/ExportExcelModel';
+import { ExportFileService } from 'src/app/service/export-file.service';
+import { ExportFileModel } from 'src/app/service/model/ExportFileModel';
 import { FileParams } from 'src/app/service/model/FileParams';
 import { Clipboard } from '@angular/cdk/clipboard'
 import { DocumentDigits } from '../DocumentDigits';
@@ -26,7 +26,7 @@ const DIGITS_CNPJ = '0001';
 
     constructor(private clipboard: Clipboard,
       private _snackBar: MatSnackBar,
-      private exportExcel: ExportExcel,
+      private exportExcel: ExportFileService,
       private cnpjPipe : CnpjPipe,
       private fakerService : FakerService){
     }
@@ -113,7 +113,7 @@ const DIGITS_CNPJ = '0001';
     }
 
     exportCnpj(fileParams: FileParams){
-      const exportCnpj : ExportExcelModel[] = [];
+      const exportCnpj : ExportFileModel[] = [];
       if (this.formatCnpj === 1) {
         for (let i=0;i<fileParams.exportItens;i++) {
           exportCnpj.push({
