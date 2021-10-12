@@ -48,8 +48,26 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
       }
     }
 
-    decodeBase64(){
-      this.textToEncode = atob(this.textToDecode);
+    decodeBase64() {
+        if (this.textToDecode === '') {
+          this.textToEncode = '';
+          return;
+        }
+        if (this.multipleLines) {
+          const lineDecoded : Array<string> = [];
+          if (this.textToDecode.indexOf('\r') > 0) {
+            this.textToDecode.split('\r\n').forEach(line => {
+              lineDecoded.push(atob(line));
+            });
+          } else {
+            this.textToDecode.split('\n').forEach(line => {
+              lineDecoded.push(atob(line));
+            });
+          }
+          this.textToEncode = lineDecoded.toString().split(',').join('\n');
+        } else {
+          this.textToEncode = atob(this.textToDecode);
+        }
     }
 
     readFile(event: any) {
