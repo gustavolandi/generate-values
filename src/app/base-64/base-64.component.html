@@ -22,15 +22,40 @@
 
   </div>
 
-  <mat-divider></mat-divider>
-
 <div class="m-3">
     <h3>Importar Arquivo</h3>
 </div>
 
 <div class="m-3">
   <input type="file" (change)="readFile($event)" accept=".txt">
-  </div>
+</div>
 
+
+<mat-divider></mat-divider>
+
+<div class="m-3">
+    <h3>Converter Arquivo</h3>
+</div>
+
+<div class="m-3">
+  <mat-radio-group [(ngModel)]="convertFileSelect">
+      <div *ngFor="let option of convertFileOptions">
+          <mat-radio-button class="m-2"  [value]="option.id">
+              {{option.text}}
+          </mat-radio-button>
+      </div>
+  </mat-radio-group>
+</div>
+
+<div class="m-3">
+  <mat-checkbox class="example-margin" [checked]="false" (change)="selectMultipleLinesToConvert($event.checked)">
+    Múltiplas Linhas
+  </mat-checkbox>
+
+</div>
+
+<div class="m-3">
+  <input type="file" (change)="readAndConvertFile($event)" accept=".txt">
+</div>
 
 

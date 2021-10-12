@@ -15,6 +15,10 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
     fileContent: string | ArrayBuffer | null = '';
     private _mobileQueryListener: () => void;
     multipleLines : boolean = false;
+    multipleLinesToConvertFile : boolean = false;
+    convertFileOptions = [{text: 'Encode', id : 1 }, {text: 'Decode', id: 2}];
+    convertFileSelect : number = 1;
+
       
     constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -83,9 +87,17 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
       this.encodeBase64();
     }
 
+    selectMultipleLinesToConvert(checked : boolean) {
+      this.multipleLinesToConvertFile = checked;
+    }
+
     private convertFile(file : any) {
       this.textToEncode = file;
       this.encodeBase64();
+    }
+
+    readAndConvertFile(event: any) {
+
     }
 
   }
