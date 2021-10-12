@@ -27,26 +27,25 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
     }
 
     encodeBase64(){
-      if (this.textToEncode !== '') {
-        if (this.multipleLines) {
-          const lineEncoded : Array<string> = [];
-          if (this.textToEncode.indexOf('\r') > 0) {
-            this.textToEncode.split('\r\n').forEach(line => {
-              lineEncoded.push(btoa(line));
-            });
-            this.textToDecode = lineEncoded.toString().split(',').join('\n');
-          } else {
-            this.textToEncode.split('\n').forEach(line => {
-              lineEncoded.push(btoa(line));
-            });
-            this.textToDecode = lineEncoded.toString().split(',').join('\n');
-          }
-        } else {
-          this.textToDecode = btoa(this.textToEncode);
-        }
-    } else {
+      if (this.textToEncode === '') {
         this.textToDecode = '';
-    }
+        return;
+      }
+      if (this.multipleLines) {
+        const lineEncoded : Array<string> = [];
+        if (this.textToEncode.indexOf('\r') > 0) {
+          this.textToEncode.split('\r\n').forEach(line => {
+            lineEncoded.push(btoa(line));
+          });
+        } else {
+          this.textToEncode.split('\n').forEach(line => {
+            lineEncoded.push(btoa(line));
+          });
+        }
+        this.textToDecode = lineEncoded.toString().split(',').join('\n');
+      } else {
+        this.textToDecode = btoa(this.textToEncode);
+      }
     }
 
     decodeBase64(){
@@ -66,20 +65,9 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
       this.encodeBase64();
     }
 
-
     private convertFile(file : any) {
-      const linesText : Array<string> = file.split('\r\n');
-      if (this.multipleLines) {
-        const lineEncoded : Array<string> = [];
-        linesText.forEach(line => {
-          lineEncoded.push(btoa(line));
-        });
-        this.textToEncode = file;
-          this.textToDecode = lineEncoded.toString().replace(',','\r\n');
-      } else {
-        this.textToEncode = file;
-        this.textToDecode = btoa(file);
-      }
+      this.textToEncode = file;
+      this.encodeBase64();
     }
 
   }
