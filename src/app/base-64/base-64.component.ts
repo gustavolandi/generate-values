@@ -12,8 +12,9 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
     textToEncode : string = '';
     textToDecode : string = '';
     control : boolean = false;
-  
+    fileContent: string | ArrayBuffer | null = '';
     private _mobileQueryListener: () => void;
+    multipleLines : boolean = false;
       
     constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
@@ -26,11 +27,60 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
     }
 
     encodeBase64(){
-      this.textToDecode = btoa(this.textToEncode);
+      if (this.textToEncode !== '') {
+        if (this.multipleLines) {
+          const lineEncoded : Array<string> = [];
+          if (this.textToEncode.indexOf('\r') > 0) {
+            this.textToEncode.split('\r\n').forEach(line => {
+              lineEncoded.push(btoa(line));
+            });
+            this.textToDecode = lineEncoded.toString().split(',').join('\n');
+          } else {
+            this.textToEncode.split('\n').forEach(line => {
+              lineEncoded.push(btoa(line));
+            });
+            this.textToDecode = lineEncoded.toString().split(',').join('\n');
+          }
+        } else {
+          this.textToDecode = btoa(this.textToEncode);
+        }
+    } else {
+        this.textToDecode = '';
+    }
     }
 
     decodeBase64(){
       this.textToEncode = atob(this.textToDecode);
     }
 
+    readFile(event: any) {
+      let fileReader: FileReader = new FileReader();
+      fileReader.onload = (e) => {
+        this.convertFile(fileReader.result);
+      }
+      fileReader.readAsText(event.target.files[0]);
+    }
+
+    selectMultipleLines(checked: boolean){
+      this.multipleLines = checked;
+      this.encodeBase64();
+    }
+
+
+    private convertFile(file : any) {
+      const linesText : Array<string> = file.split('\r\n');
+      if (this.multipleLines) {
+        const lineEncoded : Array<string> = [];
+        linesText.forEach(line => {
+          lineEncoded.push(btoa(line));
+        });
+        this.textToEncode = file;
+          this.textToDecode = lineEncoded.toString().replace(',','\r\n');
+      } else {
+        this.textToEncode = file;
+        this.textToDecode = btoa(file);
+      }
+    }
+
   }
+
