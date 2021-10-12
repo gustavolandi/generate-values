@@ -27,7 +27,8 @@
 </div>
 
 <div class="m-3">
-  <input class="input-file" type="file" (change)="readFile($event)" accept=".txt">
+  <button class="btn-generate" mat-raised-button (click)="fileInputEncode.click()" color="primary">Importar arquivo</button>
+  <input hidden type="file" #fileInputEncode (change)="readFile($event)" accept=".txt">
 </div>
 
 
@@ -55,7 +56,8 @@
 </div>
 
 <div class="m-3">
-  <input class="input-file" type="file" (change)="readAndConvertFile($event)" accept=".txt">
+  <button class="btn-generate" mat-raised-button (click)="fileInputConvert.click()" color="primary">Converter arquivo</button>
+  <input hidden type="file" #fileInputConvert (change)="readAndConvertFile($event)" accept=".txt">
 </div>
 
 
