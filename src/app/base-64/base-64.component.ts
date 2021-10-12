@@ -1,5 +1,8 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ExportFileService } from '../service/export-file.service';
+import { ExportFileModel } from '../service/model/ExportFileModel';
+import { FileParams } from '../service/model/FileParams';
 
 @Component({
     selector: 'base-64',
@@ -20,7 +23,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
     convertFileSelect : number = 1;
 
       
-    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private exportFile : ExportFileService) {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener);
@@ -69,7 +72,25 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
     }
 
     readAndConvertFile(event: any) {
-      
+      let fileReader: FileReader = new FileReader();
+      fileReader.onload = () => {
+        const result : any = fileReader.result;
+        let textEncoded = this.encodeDecode(result,this.validateTypeEncodeOrDecode(),this.multipleLinesToConvertFile);
+        const exportFile : ExportFileModel[] = [];
+        textEncoded.split('\n').forEach(item => {
+          exportFile.push({
+            firstColumn : item
+          });
+        });
+        this.exportFile.exportFile(exportFile,
+          {
+          fileName : 'Base64_' + this.validateTypeEncodeOrDecode(),
+          exportItens : textEncoded.split('\n').length,
+          fileType : 'txt'
+          }
+        );
+      }
+      fileReader.readAsText(event.target.files[0]);
     }
 
     encodeDecode(text : string, encodeOrDecode : string,multipleLines : boolean) {
@@ -97,6 +118,10 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
         return btoa(text);
       } 
       return atob(text);
+    }
+
+    validateTypeEncodeOrDecode() : string {
+      return this.convertFileSelect == 1 ? 'encode' : 'decode';
     }
 
 
