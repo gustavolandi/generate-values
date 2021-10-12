@@ -35,21 +35,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
         this.textToDecode = '';
         return;
       }
-      if (this.multipleLines) {
-        const lineEncoded : Array<string> = [];
-        if (this.textToEncode.indexOf('\r') > 0) {
-          this.textToEncode.split('\r\n').forEach(line => {
-            lineEncoded.push(btoa(line));
-          });
-        } else {
-          this.textToEncode.split('\n').forEach(line => {
-            lineEncoded.push(btoa(line));
-          });
-        }
-        this.textToDecode = lineEncoded.toString().split(',').join('\n');
-      } else {
-        this.textToDecode = btoa(this.textToEncode);
-      }
+      this.textToDecode = this.encodeDecode(this.textToEncode,'encode',this.multipleLines);
     }
 
     decodeBase64() {
@@ -57,21 +43,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
           this.textToEncode = '';
           return;
         }
-        if (this.multipleLines) {
-          const lineDecoded : Array<string> = [];
-          if (this.textToDecode.indexOf('\r') > 0) {
-            this.textToDecode.split('\r\n').forEach(line => {
-              lineDecoded.push(atob(line));
-            });
-          } else {
-            this.textToDecode.split('\n').forEach(line => {
-              lineDecoded.push(atob(line));
-            });
-          }
-          this.textToEncode = lineDecoded.toString().split(',').join('\n');
-        } else {
-          this.textToEncode = atob(this.textToDecode);
-        }
+        this.textToEncode = this.encodeDecode(this.textToDecode,'decode',this.multipleLines);
     }
 
     readFile(event: any) {
@@ -97,8 +69,37 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
     }
 
     readAndConvertFile(event: any) {
-
+      
     }
+
+    encodeDecode(text : string, encodeOrDecode : string,multipleLines : boolean) {
+      let textToEncodeDecode = '';
+      if (multipleLines) {
+        const lineDecoded : Array<string> = [];
+        if (text.indexOf('\r') > 0) {
+          text.split('\r\n').forEach(line => {
+            lineDecoded.push(this.encodeOrDecode(line,encodeOrDecode));
+          });
+        } else {
+          text.split('\n').forEach(line => {
+            lineDecoded.push(this.encodeOrDecode(line,encodeOrDecode));
+          });
+        }
+        textToEncodeDecode = lineDecoded.toString().split(',').join('\n');
+      } else {
+        textToEncodeDecode = this.encodeOrDecode(text,encodeOrDecode);
+      }
+      return textToEncodeDecode;
+    }
+
+    encodeOrDecode(text : string, encodeOrDecode : string) : string {
+      if (encodeOrDecode === 'encode') {
+        return btoa(text);
+      } 
+      return atob(text);
+    }
+
+
 
   }
 
