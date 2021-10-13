@@ -21,6 +21,7 @@ import { FileParams } from '../service/model/FileParams';
     multipleLinesToConvertFile : boolean = false;
     convertFileOptions = [{text: 'Encode', id : 1 }, {text: 'Decode', id: 2}];
     convertFileSelect : number = 1;
+    controlDownloadFile : boolean = true;
 
       
     constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private exportFile : ExportFileService) {
@@ -36,17 +37,21 @@ import { FileParams } from '../service/model/FileParams';
     encodeBase64(){
       if (this.textToEncode === '') {
         this.textToDecode = '';
+        this.controlDownloadFile = true;
         return;
       }
       this.textToDecode = this.encodeDecode(this.textToEncode,'encode',this.multipleLines);
+      this.controlDownloadFile = false;
     }
 
     decodeBase64() {
-        if (this.textToDecode === '') {
-          this.textToEncode = '';
-          return;
-        }
-        this.textToEncode = this.encodeDecode(this.textToDecode,'decode',this.multipleLines);
+      if (this.textToDecode === '') {
+        this.textToEncode = '';
+        this.controlDownloadFile = true;
+        return;
+      }
+      this.textToEncode = this.encodeDecode(this.textToDecode,'decode',this.multipleLines);
+      this.controlDownloadFile = false;
     }
 
     readFile(event: any) {
@@ -122,6 +127,36 @@ import { FileParams } from '../service/model/FileParams';
 
     validateTypeEncodeOrDecode() : string {
       return this.convertFileSelect == 1 ? 'encode' : 'decode';
+    }
+
+    downloadFile(type: string) {
+      console.log('download file');
+      if (this.textToEncode != '' && this.textToDecode != ''){
+        let length = 0;
+        const exportFile : ExportFileModel[] = [];
+        if (type === 'encode') {
+          length = this.textToEncode.split('\n').length;
+          this.textToEncode.split('\n').forEach(item => {
+            exportFile.push({
+              firstColumn : item
+            });
+          });
+        } else {
+          length = this.textToDecode.split('\n').length;
+          this.textToDecode.split('\n').forEach(item => {
+            exportFile.push({
+              firstColumn : item
+            });
+          });
+        }
+        this.exportFile.exportFile(exportFile,
+          {
+          fileName : 'Base64_' + this.validateTypeEncodeOrDecode(),
+          exportItens : length,
+          fileType : 'txt'
+          }
+        );
+      }
     }
 
 

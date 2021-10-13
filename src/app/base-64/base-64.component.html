@@ -4,28 +4,27 @@
         <mat-form-field class="field-full-width" appearance="fill" name="encodeField" ngDefaultControl>
             <mat-label>Encode Base 64</mat-label>
             <textarea matInput rows=10 [(ngModel)]="textToEncode" (input)="encodeBase64()"></textarea>
+            <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('encode')">file_download</mat-icon>
           </mat-form-field>
       </div>
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
         <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
             <mat-label>Decode Base 64</mat-label>
-            <textarea matInput rows=10 [(ngModel)]="textToDecode" (input)="decodeBase64()"></textarea>
+            <textarea matInput rows=10 [(ngModel)]="textToDecode" (input)="decodeBase64()">
+            </textarea>
+            <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('decode')">file_download</mat-icon>
           </mat-form-field>
       </div>
     </div>
   </div>
-
   <div class="m-3">
     <mat-checkbox class="example-margin" [checked]="false" (change)="selectMultipleLines($event.checked)">
       Múltiplas Linhas
     </mat-checkbox>
-
   </div>
-
 <div class="m-3">
     <h3>Importar Arquivo</h3>
 </div>
-
 <div class="m-3">
   <button class="btn-generate" mat-raised-button (click)="fileInputEncode.click()" color="primary">Importar arquivo</button>
   <input hidden type="file" #fileInputEncode (change)="readFile($event)" accept=".txt">
