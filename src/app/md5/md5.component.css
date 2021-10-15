@@ -18,10 +18,20 @@
     right: 0;
 }
 
+.btn-textarea-copy {
+    position: absolute;
+    top: 0;
+    right: 30px;
+}
+
 .hand-click {
     cursor: pointer;
 }
 
 .icon-disabled{
     opacity: 0.3;
+}
+
+textarea {
+    margin-top: 30px;
 }

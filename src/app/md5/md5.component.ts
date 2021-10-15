@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { Md5 } from 'md5-typescript';
 import { ExportFileService } from '../service/export-file.service';
 import { ExportFileModel } from '../service/model/ExportFileModel';
+import { SharedService } from '../service/shared.service';
 
 @Component({
     selector: 'md5',
@@ -27,7 +28,9 @@ import { ExportFileModel } from '../service/model/ExportFileModel';
     @ViewChild('fileInputEncode') fileEncode!: ElementRef;
 
       
-    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private exportFile : ExportFileService) {
+    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, 
+      private exportFile : ExportFileService,
+      private sharedService : SharedService) {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener);
@@ -146,7 +149,13 @@ import { ExportFileModel } from '../service/model/ExportFileModel';
       }
     }
 
-
+    copyValue(valueToCopy : string) {
+      if (valueToCopy === 'encode') {
+        this.sharedService.copyValue(this.textToEncode);
+      } else if (valueToCopy === 'decode') {
+        this.sharedService.copyValue(this.textToDecode);
+      }
+    }
 
   }
 

@@ -3,16 +3,18 @@
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
         <mat-form-field class="field-full-width" appearance="fill" name="encodeField" ngDefaultControl>
             <mat-label>Encode MD5</mat-label>
-            <textarea matInput rows=10 [(ngModel)]="textToEncode" (input)="encodeMd5()"></textarea>
+            <textarea matInput rows=10 [matTextareaAutosize]="true" [(ngModel)]="textToEncode" (input)="encodeMd5()"></textarea>
             <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('encode')">file_download</mat-icon>
+            <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('encode')">content_copy</mat-icon>
           </mat-form-field>
       </div>
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
         <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
             <mat-label>Decode MD5</mat-label>
-            <textarea disabled matInput rows=10 [(ngModel)]="textToDecode">
+            <textarea disabled matInput rows=10 [matTextareaAutosize]="true" [(ngModel)]="textToDecode">
             </textarea>
             <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('decode')">file_download</mat-icon>
+            <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('decode')">content_copy</mat-icon>
           </mat-form-field>
       </div>
     </div>
