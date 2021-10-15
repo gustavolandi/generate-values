@@ -3,16 +3,18 @@
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
         <mat-form-field class="field-full-width" appearance="fill" name="encodeField" ngDefaultControl>
             <mat-label>Encode Base 64</mat-label>
-            <textarea matInput rows=10 [(ngModel)]="textToEncode" (input)="encodeBase64()"></textarea>
+            <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="textToEncode" (input)="encodeBase64()"></textarea>
             <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('encode')">file_download</mat-icon>
+            <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('encode')">content_copy</mat-icon>
           </mat-form-field>
       </div>
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
         <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
             <mat-label>Decode Base 64</mat-label>
-            <textarea matInput rows=10 [(ngModel)]="textToDecode" (input)="decodeBase64()">
+            <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="textToDecode" (input)="decodeBase64()">
             </textarea>
             <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('decode')">file_download</mat-icon>
+            <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('decode')">content_copy</mat-icon>
           </mat-form-field>
       </div>
     </div>
