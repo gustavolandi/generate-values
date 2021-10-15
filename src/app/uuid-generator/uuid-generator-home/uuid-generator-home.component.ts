@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { v4 as uuidv4 } from 'uuid';
 import { ExportFileService } from 'src/app/service/export-file.service';
 import { ExportFileModel } from 'src/app/service/model/ExportFileModel';
 import { FileParams } from 'src/app/service/model/FileParams';
 import { SharedService } from 'src/app/service/shared.service';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 @Component({
   selector: 'uuid-generator-home',
@@ -13,9 +14,15 @@ import { SharedService } from 'src/app/service/shared.service';
 export class UUIDGeneratorHome implements OnInit {
 
     uuid = '';
+    mobileQuery: MediaQueryList;
+    private _mobileQueryListener: () => void;
 
-    constructor(private sharedService: SharedService,
+    constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, 
+        private sharedService: SharedService,
         private exportFileService: ExportFileService){
+            this.mobileQuery = media.matchMedia('(max-width: 600px)');
+            this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+            this.mobileQuery.addListener(this._mobileQueryListener);
     }
 
     ngOnInit(){
