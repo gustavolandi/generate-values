@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ExportFileService } from '../service/export-file.service';
 import { ExportFileModel } from '../service/model/ExportFileModel';
 import { FileParams } from '../service/model/FileParams';
@@ -22,6 +22,9 @@ import { FileParams } from '../service/model/FileParams';
     convertFileOptions = [{text: 'Encode', id : 1 }, {text: 'Decode', id: 2}];
     convertFileSelect : number = 1;
     controlDownloadFile : boolean = true;
+
+    @ViewChild('fileInputConvert') fileInputConvert!: ElementRef;
+    @ViewChild('fileInputEncode') fileEncode!: ElementRef;
 
       
     constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private exportFile : ExportFileService) {
@@ -60,6 +63,7 @@ import { FileParams } from '../service/model/FileParams';
         this.convertFile(fileReader.result);
       }
       fileReader.readAsText(event.target.files[0]);
+      this.fileEncode.nativeElement.value = '';
     }
 
     selectMultipleLines(checked: boolean){
@@ -96,6 +100,7 @@ import { FileParams } from '../service/model/FileParams';
         );
       }
       fileReader.readAsText(event.target.files[0]);
+      this.fileInputConvert.nativeElement.value = '';
     }
 
     encodeDecode(text : string, encodeOrDecode : string,multipleLines : boolean) {
