@@ -30,4 +30,9 @@ export const MENU_ITENS : MenuItem[] = [
       fullName : 'MD5',
       item : 5
     },
+    {
+      name : 'jwt',
+      fullName : 'JWT',
+      item : 6
+    },
   ];
