@@ -15,7 +15,7 @@
 }
 
 .btn-generate{
-    font-size: 25px;
+    font-size: 18px;
     width: 200px;
 }
   
@@ -41,7 +41,7 @@ width: 100%;
 
 @media screen and (max-width: 540px) {
     .teste-font {
-        font-size: 15px;
+        font-size: 18px;
     }
 }
 
