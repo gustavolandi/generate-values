@@ -6,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Base64Module } from '../base-64/base-64.module';
 import { DocumentGeneratorModule } from '../document-generator/document-generator.module';
 import { MaterialModule } from '../material/material.module';
+import { MD5Module } from '../md5/md5.module';
 import { UUIDGeneratorModule } from '../uuid-generator/uuid-generator.module';
 import { MenuItensComponent } from './menu-itens/menu-itens.component';
 import { MenuComponent } from './menu.component';
@@ -24,7 +25,8 @@ import { MenuComponent } from './menu.component';
     ReactiveFormsModule,
     UUIDGeneratorModule,
     DocumentGeneratorModule,
-    Base64Module
+    Base64Module,
+    MD5Module
   ],
   providers: [],
   bootstrap: [MenuComponent]

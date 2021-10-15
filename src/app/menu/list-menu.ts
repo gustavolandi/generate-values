@@ -25,4 +25,9 @@ export const MENU_ITENS : MenuItem[] = [
       fullName : 'Base64',
       item : 4
     },
+    {
+      name : 'md5',
+      fullName : 'MD5',
+      item : 5
+    },
   ];

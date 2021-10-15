@@ -1,0 +1,52 @@
+<div class="container-fluid">
+    <div class="row table-base64">
+      <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
+        <mat-form-field class="field-full-width" appearance="fill" name="encodeField" ngDefaultControl>
+            <mat-label>Encode MD5</mat-label>
+            <textarea matInput rows=10 [(ngModel)]="textToEncode" (input)="encodeMd5()"></textarea>
+            <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('encode')">file_download</mat-icon>
+          </mat-form-field>
+      </div>
+      <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
+        <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
+            <mat-label>Decode MD5</mat-label>
+            <textarea disabled matInput rows=10 [(ngModel)]="textToDecode">
+            </textarea>
+            <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('decode')">file_download</mat-icon>
+          </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <div class="m-3">
+    <mat-checkbox class="example-margin" [checked]="false" (change)="selectMultipleLines($event.checked)">
+      Múltiplas Linhas
+    </mat-checkbox>
+  </div>
+<div class="m-3">
+    <h3>Importar Arquivo</h3>
+</div>
+<div class="m-3">
+  <button class="btn-generate" mat-raised-button (click)="fileInputEncode.click()" color="primary">Importar arquivo</button>
+  <input hidden type="file" #fileInputEncode (change)="readFile($event)" accept=".txt">
+</div>
+
+
+<mat-divider></mat-divider>
+
+<div class="m-3">
+    <h3>Converter Arquivo</h3>
+</div>
+
+<div class="m-3">
+  <mat-checkbox class="example-margin" [checked]="false" (change)="selectMultipleLinesToConvert($event.checked)">
+    Múltiplas Linhas
+  </mat-checkbox>
+
+</div>
+
+<div class="m-3">
+  <button class="btn-generate" mat-raised-button (click)="fileInputConvert.click()" color="primary">Converter arquivo</button>
+  <input hidden type="file" #fileInputConvert (change)="readAndConvertFile($event)" accept=".txt">
+</div>
+
+
