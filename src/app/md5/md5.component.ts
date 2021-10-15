@@ -150,10 +150,12 @@ import { SharedService } from '../service/shared.service';
     }
 
     copyValue(valueToCopy : string) {
-      if (valueToCopy === 'encode') {
-        this.sharedService.copyValue(this.textToEncode);
-      } else if (valueToCopy === 'decode') {
-        this.sharedService.copyValue(this.textToDecode);
+      if (this.textToEncode != '') {
+        if (valueToCopy === 'encode') {
+          this.sharedService.copyValue(this.textToEncode);
+        } else if (valueToCopy === 'decode') {
+          this.sharedService.copyValue(this.textToDecode);
+        }
       }
     }
 
