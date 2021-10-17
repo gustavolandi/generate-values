@@ -4,24 +4,24 @@
         <mat-form-field class="field-full-width" appearance="fill" name="encodeField" ngDefaultControl>
             <mat-label>JWT</mat-label>
             <textarea [matTextareaAutosize]="true" matInput rows=30 [(ngModel)]="jwtEncoded" (input)="jwtDecode()"></textarea>
-            <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('encode')">file_download</mat-icon>
-            <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('encode')">content_copy</mat-icon>
+            <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('tokenEncoded')">file_download</mat-icon>
+            <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('tokenEncoded')">content_copy</mat-icon>
           </mat-form-field>
       </div>
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
         <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
           <mat-label>Header</mat-label>
-          <textarea [matTextareaAutosize]="true" matInput rows=5 [(ngModel)]="jwtDecodedHeader">
+          <textarea [matTextareaAutosize]="true" matInput rows=5 [(ngModel)]="jwtDecodedHeader" (input)="headerEncode()">
           </textarea>
-          <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('decode')">file_download</mat-icon>
-          <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('decode')">content_copy</mat-icon>
+          <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile"  [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('tokenDecodedHeader')">file_download</mat-icon>
+          <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('tokenDecodedHeader')">content_copy</mat-icon>
         </mat-form-field>
         <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
           <mat-label>Payload</mat-label>
-          <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="jwtDecodedPayload">
+          <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="jwtDecodedPayload" (input)="payloadEncode()">
           </textarea>
-          <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('decode')">file_download</mat-icon>
-          <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('decode')">content_copy</mat-icon>
+          <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('tokenDecodedPayload')">file_download</mat-icon>
+          <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('tokenDecodedPayload')">content_copy</mat-icon>
         </mat-form-field>
       </div>
     </div>

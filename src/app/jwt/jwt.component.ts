@@ -6,6 +6,7 @@ import { SharedService } from '../service/shared.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
+const CryptoJS = require("crypto-js");
 
 @Component({
     selector: 'jwt',
@@ -26,22 +27,32 @@ const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
     jwtDecodedSignaturePrivateKey : string = '';
     jwtDecodedSignaturePublicKey : string = '';
 
+    secretHsToken = 'teste';
+
     control : boolean = false;
     fileContent: string | ArrayBuffer | null = '';
 
-    convertFileOptions = [{text: 'Encode', id : 1 }, {text: 'Decode', id: 2}];
-    convertFileSelect : number = 1;
-    controlDownloadFile : boolean = true;
+    jwtAlgorithm = [
+      { text: 'HS256', id: 1 }, 
+      { text: 'HS384', id: 2 },
+      { text: 'HS512', id: 3 },
+  ];
+    jwtAlgorithmSelected : number = 1;
 
+    controlDownloadFile : boolean = true;
+    
     @ViewChild('fileInputConvert') fileInputConvert!: ElementRef;
     @ViewChild('fileInputEncode') fileEncode!: ElementRef;
-      
+    
+    jwtHelperService : JwtHelperService;
+
     constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher,
       private exportFile : ExportFileService,
       private sharedService : SharedService) {
       this.mobileQuery = media.matchMedia('(max-width: 600px)');
       this._mobileQueryListener = () => changeDetectorRef.detectChanges();
       this.mobileQuery.addListener(this._mobileQueryListener);
+      this.jwtHelperService = new JwtHelperService();
     }
 
     ngOnInit(): void {
@@ -54,17 +65,15 @@ const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
         this.jwtDecodedHeader = '';
         this.jwtDecodedPayload = '';
         this.jwtDecodedSignature = '';
-        this.jwtDecodedSignaturePrivateKey = '';
-        this.jwtDecodedSignaturePublicKey = '';
+        this.controlDownloadFile = true;
         return;
       }
 
       if (this.jwtEncoded.match(REGEX_JWT)) {
 
         try {
-           const jwtHelperService = new JwtHelperService();
           
-          const decodedToken = jwtHelperService.decodeToken(this.jwtEncoded);
+          const decodedToken = this.jwtHelperService.decodeToken(this.jwtEncoded);
           
           this.jwtDecodedPayload = JSON.stringify(decodedToken, undefined, 4);
 
@@ -74,13 +83,35 @@ const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
           
           const jsonTokenHeader = JSON.parse(decodedHeader);
           this.jwtDecodedHeader =  JSON.stringify(jsonTokenHeader, undefined, 4);
+          this.signKeyHS256(this.jwtEncoded.split('.')[0] + '.' + this.jwtEncoded.split('.')[1],this.secretHsToken);
+          this.controlDownloadFile = false;
         } catch (e) {
-          console.log(e);
+              
         }
-
-      } else {
-        
       }
+    }
+
+    headerEncode(){
+      const jwtDecodedHeader = JSON.stringify(JSON.parse(this.jwtDecodedHeader));
+      const headerEncoded = this.base64Url2(jwtDecodedHeader);  
+      const jwtEncoded = headerEncoded + '.' + this.jwtEncoded.split('.')[1];
+      let signature = '';
+      switch (JSON.parse(this.jwtDecodedHeader).alg) {
+        case 'HS256' :
+          signature = this.signKeyHS256(jwtEncoded,this.secretHsToken);
+          break;
+        case 'HS384' :
+          signature = this.signKeyHS384(jwtEncoded,this.secretHsToken);
+          break;
+        case 'HS512' : 
+          signature = this.signKeyHS512(jwtEncoded,this.secretHsToken);
+          break;  
+      } 
+      this.jwtEncoded = jwtEncoded + '.' + signature;
+    }
+
+    payloadEncode(){
+      
     }
 
     validateJwt(){
@@ -88,14 +119,39 @@ const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
       const expirationDate = jwtHelperService.getTokenExpirationDate(this.jwtEncoded);
       const isExpired = jwtHelperService.isTokenExpired(this.jwtEncoded);
     }
-     
 
-    encodeBase64(){
+    signKeyHS256(msg: string,key: string) {
+      let signature  = CryptoJS.HmacSHA256(msg, key);
+      signature = this.base64url(signature);
+      return signature ;
     }
 
-    decodeBase64() {
-
+    signKeyHS384(msg: string,key: string) {
+      let signature  = CryptoJS.HmacSHA384(msg, key);
+      signature = this.base64url(signature);
+      return signature ;
     }
+
+    signKeyHS512(msg: string,key: string) {
+      let signature  = CryptoJS.HmacSHA512(msg, key);
+      signature = this.base64url(signature);
+      return signature ;
+    }
+
+    base64url(source: string) {
+      return CryptoJS.enc.Base64.stringify(source)
+              .replace(/=+$/, '')
+              .replace(/\+/g, '-')
+              .replace(/\//g, '_');
+    }
+
+    base64Url2(text : string) {
+      return btoa(text)
+      .replace(/=+$/, '')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_');
+    }
+    
 
     readFile(event: any) {
      
