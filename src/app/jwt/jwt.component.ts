@@ -126,15 +126,15 @@ const CryptoJS = require("crypto-js");
       let signature = '';
       switch (alg) {
         case 'HS256' :
-          signature = CryptoJS.HmacSHA256(msg, this.secretHsToken);
+          signature = CryptoJS.HmacSHA256(msg, this.secretHsTokenValue);
           this.jwtAlgorithmSelected = 1;
           break;
         case 'HS384' :
-          signature = CryptoJS.HmacSHA384(msg, this.secretHsToken);
+          signature = CryptoJS.HmacSHA384(msg, this.secretHsTokenValue);
           this.jwtAlgorithmSelected = 2;
           break;
         case 'HS512' : 
-          signature  = CryptoJS.HmacSHA512(msg, this.secretHsToken);
+          signature  = CryptoJS.HmacSHA512(msg, this.secretHsTokenValue);
           this.jwtAlgorithmSelected = 3;
           break;
       }
@@ -162,10 +162,18 @@ const CryptoJS = require("crypto-js");
 
     updateSecretHS(){
       this.secretKeyHSValue();
-      
+      if (this.jwtEncoded !== '') {
+        const jwtDecodedHeader = JSON.stringify(JSON.parse(this.jwtDecodedHeader));
+        const headerEncoded = this.base64Url2(jwtDecodedHeader);  
+        const jwtDecodedPayload = JSON.stringify(JSON.parse(this.jwtDecodedPayload));
+        const payloadEncoded = this.base64Url2(jwtDecodedPayload);  
+        const jwtEncoded = headerEncoded + '.' + payloadEncoded;
+        let signature = this.signKeyHS(jwtEncoded,JSON.parse(jwtDecodedHeader).alg);
+        this.jwtEncoded = jwtEncoded + '.' + signature;
+      }
     }
 
-    encodeKeyHsBase64(checked: boolean){
+    encodeKeyHsBase64(checked: boolean) {
       this.secretHsEncoded = checked;
       this.secretKeyHSValue();
       this.updateSecretHS();

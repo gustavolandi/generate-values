@@ -12,7 +12,7 @@
 <div class="container-fluid">
     <div class="row table-base64">
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
-        <mat-form-field class="field-full-width" appearance="fill" name="encodeField" ngDefaultControl>
+        <mat-form-field class="field-full-width jwt-font" appearance="fill" name="encodeField" ngDefaultControl>
             <mat-label>JWT</mat-label>
             <textarea [matTextareaAutosize]="true" matInput rows=30 [(ngModel)]="jwtEncoded" (input)="jwtDecode()"></textarea>
             <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('tokenEncoded')">file_download</mat-icon>
