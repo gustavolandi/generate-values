@@ -35,4 +35,9 @@ export const MENU_ITENS : MenuItem[] = [
       fullName : 'JWT',
       item : 6
     },
+    {
+      name : 'rsa',
+      fullName : 'RSA Key Generator',
+      item : 7
+    },
   ];
