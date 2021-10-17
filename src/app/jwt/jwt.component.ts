@@ -27,7 +27,9 @@ const CryptoJS = require("crypto-js");
     jwtDecodedSignaturePrivateKey : string = '';
     jwtDecodedSignaturePublicKey : string = '';
 
-    secretHsToken = 'teste';
+    secretHsToken = '';
+    secretHsTokenValue = '';
+    secretHsEncoded : boolean = false;
 
     control : boolean = false;
     fileContent: string | ArrayBuffer | null = '';
@@ -115,6 +117,7 @@ const CryptoJS = require("crypto-js");
         case 'HS512' : 
           signature = this.signKeyHS512(jwtEncoded,this.secretHsToken);
           this.jwtAlgorithmSelected = 3;
+          break;
       } 
       this.jwtEncoded = jwtEncoded + '.' + signature;
     }
@@ -160,7 +163,28 @@ const CryptoJS = require("crypto-js");
       .replace(/\+/g, '-')
       .replace(/\//g, '_');
     }
-    
+
+    jwtAlgorithmSelectedHS() : boolean {
+      return this.jwtAlgorithmSelected === 1 || this.jwtAlgorithmSelected === 2 || this.jwtAlgorithmSelected === 3;
+    }
+
+    updateSecretHS(){
+      this.secretKeyHSValue();
+    }
+
+    encodeKeyHsBase64(checked: boolean){
+      this.secretHsEncoded = checked;
+      this.secretKeyHSValue();
+      this.updateSecretHS();
+    }
+
+    secretKeyHSValue(){
+      if (this.secretHsEncoded) {
+        this.secretHsTokenValue = this.base64Url2(this.secretHsToken);
+      } else {
+        this.secretHsTokenValue = this.secretHsToken;
+      }
+    }
 
     readFile(event: any) {
      
