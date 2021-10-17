@@ -116,6 +116,23 @@ const CryptoJS = require("crypto-js");
       this.jwtEncoded = jwtEncoded + '.' + signature;
     }
 
+    updateAlgorithm(){
+      const header = JSON.parse(this.jwtDecodedHeader);
+      switch (this.jwtAlgorithmSelected) {
+        case 1 :
+          header.alg = 'HS256';
+          break;
+        case 2 :
+          header.alg = 'HS384';
+          break;
+        case 3 : 
+          header.alg = 'HS512';
+          break;  
+      } 
+      this.jwtDecodedHeader = JSON.stringify(header, undefined, 4);
+      this.headerEncode();
+    }
+
     validateJwt(){
       const jwtHelperService = new JwtHelperService();
       const expirationDate = jwtHelperService.getTokenExpirationDate(this.jwtEncoded);
@@ -175,7 +192,6 @@ const CryptoJS = require("crypto-js");
 
     encodeKeyHsBase64(checked: boolean) {
       this.secretHsEncoded = checked;
-      this.secretKeyHSValue();
       this.updateSecretHS();
     }
 

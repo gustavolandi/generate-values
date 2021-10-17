@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-center m-3">
   <mat-form-field appearance="fill">
     <mat-label>Algoritmo JWT</mat-label>
-    <mat-select [(ngModel)]="jwtAlgorithmSelected">
+    <mat-select [(ngModel)]="jwtAlgorithmSelected" (selectionChange)="updateAlgorithm()">
       <mat-option *ngFor="let alg of jwtAlgorithm" [value]="alg.id">
           {{alg.text}}
       </mat-option>
