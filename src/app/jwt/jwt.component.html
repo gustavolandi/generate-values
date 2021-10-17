@@ -1,3 +1,14 @@
+<div class="d-flex justify-content-center m-3">
+  <mat-form-field appearance="fill">
+    <mat-label>Algoritmo JWT</mat-label>
+    <mat-select [(ngModel)]="jwtAlgorithmSelected">
+      <mat-option *ngFor="let alg of jwtAlgorithm" [value]="alg.id">
+          {{alg.text}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
 <div class="container-fluid">
     <div class="row table-base64">
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">

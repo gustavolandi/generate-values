@@ -83,7 +83,17 @@ const CryptoJS = require("crypto-js");
           
           const jsonTokenHeader = JSON.parse(decodedHeader);
           this.jwtDecodedHeader =  JSON.stringify(jsonTokenHeader, undefined, 4);
-          this.signKeyHS256(this.jwtEncoded.split('.')[0] + '.' + this.jwtEncoded.split('.')[1],this.secretHsToken);
+          switch (JSON.parse(this.jwtDecodedHeader).alg) {
+            case 'HS256' :
+              this.jwtAlgorithmSelected = 1;
+              break;
+            case 'HS384' :
+              this.jwtAlgorithmSelected = 2;
+              break;
+            case 'HS512' : 
+              this.jwtAlgorithmSelected = 3;
+              break;  
+          } 
           this.controlDownloadFile = false;
         } catch (e) {
               
@@ -99,12 +109,15 @@ const CryptoJS = require("crypto-js");
       switch (JSON.parse(this.jwtDecodedHeader).alg) {
         case 'HS256' :
           signature = this.signKeyHS256(jwtEncoded,this.secretHsToken);
+          this.jwtAlgorithmSelected = 1;
           break;
         case 'HS384' :
           signature = this.signKeyHS384(jwtEncoded,this.secretHsToken);
+          this.jwtAlgorithmSelected = 2;
           break;
         case 'HS512' : 
           signature = this.signKeyHS512(jwtEncoded,this.secretHsToken);
+          this.jwtAlgorithmSelected = 3;
           break;  
       } 
       this.jwtEncoded = jwtEncoded + '.' + signature;
