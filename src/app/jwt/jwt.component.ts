@@ -38,6 +38,9 @@ const CryptoJS = require("crypto-js");
       { text: 'HS256', id: 1 }, 
       { text: 'HS384', id: 2 },
       { text: 'HS512', id: 3 },
+      { text: 'RS256', id: 4 }, 
+      { text: 'RS384', id: 5 },
+      { text: 'RS512', id: 6 },
   ];
     jwtAlgorithmSelected : number = 1;
 
@@ -188,6 +191,10 @@ const CryptoJS = require("crypto-js");
         let signature = this.signKeyHS(jwtEncoded,JSON.parse(jwtDecodedHeader).alg);
         this.jwtEncoded = jwtEncoded + '.' + signature;
       }
+    }
+
+    jwtAlgorithmSelectedRS(){
+      return this.jwtAlgorithmSelected === 4 || this.jwtAlgorithmSelected === 5 || this.jwtAlgorithmSelected === 6;
     }
 
     encodeKeyHsBase64(checked: boolean) {

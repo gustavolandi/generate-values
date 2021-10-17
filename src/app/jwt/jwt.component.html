@@ -47,10 +47,29 @@
               <input matInput [(ngModel)]="secretHsToken" (input)="updateSecretHS()">
             </mat-form-field>
           </div>
-          <div class="mt-1">
+          <!-- <div class="mt-1">
             <mat-checkbox [checked]="false" (change)="encodeKeyHsBase64($event.checked)">
               Encode Key Base64
             </mat-checkbox>
+          </div> -->
+        </div>
+        <div class="col-12" *ngIf="jwtAlgorithmSelectedRS()">
+          <div class="mt-2">
+            <h4>JWT Signature</h4>
+          </div>
+          <div class="mt-1">
+            <mat-form-field class="field-full-width" appearance="fill" name="publicKey" ngDefaultControl>
+              <mat-label>Public Key</mat-label>
+              <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="jwtRsPublicKey" (input)="updateRsPublicKey()">
+              </textarea>
+            </mat-form-field>
+          </div>
+          <div class="mt-1">
+            <mat-form-field class="field-full-width" appearance="fill" name="privateKey" ngDefaultControl>
+              <mat-label>Private Key</mat-label>
+              <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="jwtRsPrivateKey" (input)="updateRsPrivateKey()">
+              </textarea>
+            </mat-form-field>
           </div>
         </div>
       </div>
