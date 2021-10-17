@@ -19,6 +19,9 @@
             <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('tokenEncoded')">content_copy</mat-icon>
           </mat-form-field>
       </div>
+      <div class="mt-3 mb-3" *ngIf="mobileQuery.matches">
+        <mat-divider></mat-divider>
+      </div>
       <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
         <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
           <mat-label>Header</mat-label>
