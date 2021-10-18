@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-center m-3">
+    <mat-form-field appearance="fill">
+      <mat-label>Key Size</mat-label>
+      <mat-select [(ngModel)]="keySizeSelected">
+        <mat-option *ngFor="let size of keySizes" [value]="size.id">
+            {{size.text}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="d-flex justify-content-center">
+    <button class="btn-generate" mat-raised-button (click)="generateRsaKey()" color="primary">Gerar</button>
+  </div>
+  
+  <div class="container-fluid">
+    <div class="row table-base64">
+      <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
+        <mat-form-field class="field-full-width" appearance="fill" name="privateKey" ngDefaultControl>
+            <mat-label>Private Key</mat-label>
+            <textarea [matTextareaAutosize]="true" matInput rows=15 [(ngModel)]="privateKey"></textarea>
+            <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('tokenEncoded')">file_download</mat-icon>
+            <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('tokenEncoded')">content_copy</mat-icon>
+          </mat-form-field>
+      </div>
+      <div class="mt-3 mb-3" *ngIf="mobileQuery.matches">
+        <mat-divider></mat-divider>
+      </div>
+      <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
+        <mat-form-field class="field-full-width" appearance="fill" name="publicKey" ngDefaultControl>
+          <mat-label>Public Key</mat-label>
+          <textarea [matTextareaAutosize]="true" matInput rows=15 [(ngModel)]="publicKey">
+          </textarea>
+          <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile"  [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('tokenDecodedHeader')">file_download</mat-icon>
+          <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('tokenDecodedHeader')">content_copy</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+
+
+
