@@ -1,4 +1,4 @@
-<div *ngIf="mobileQuery.matches" class="d-flex justify-content-center m-3">
+<div *ngIf="isMobile()" class="d-flex justify-content-center m-3">
     <div class="row">
         <div class="d-flex justify-content-center">
             <div class="teste-font">
@@ -15,7 +15,7 @@
 
 </div>
 
-<div *ngIf="!mobileQuery.matches" class="d-flex justify-content-center m-3">
+<div *ngIf="!isMobile()" class="d-flex justify-content-center m-3">
     <div class="teste-font">
         {{uuid}}
     </div>

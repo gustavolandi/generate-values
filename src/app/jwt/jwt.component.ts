@@ -219,5 +219,9 @@ const CryptoJS = require("crypto-js");
       
     }
 
+    isMobile() : boolean {
+      return this.mobileQuery.matches;
+    }
+
   }
 

@@ -159,5 +159,9 @@ import { SharedService } from '../service/shared.service';
       }
     }
 
+    isMobile() : boolean {
+      return this.mobileQuery.matches;
+    }
+
   }
 
