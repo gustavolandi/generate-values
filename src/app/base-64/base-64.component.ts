@@ -137,7 +137,6 @@ import { SharedService } from '../service/shared.service';
     }
 
     downloadFile(type: string) {
-      console.log('download file');
       if (this.textToEncode != '' && this.textToDecode != ''){
         let length = 0;
         const exportFile : ExportFileModel[] = [];
@@ -174,6 +173,10 @@ import { SharedService } from '../service/shared.service';
           this.sharedService.copyValue(this.textToDecode);
         }
       }
+    }
+
+    isMobile() : boolean {
+      return this.mobileQuery.matches;
     }
 
   }
