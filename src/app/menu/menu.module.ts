@@ -8,6 +8,7 @@ import { DocumentGeneratorModule } from '../document-generator/document-generato
 import { JWTModule } from '../jwt/jwt.module';
 import { MaterialModule } from '../material/material.module';
 import { MD5Module } from '../md5/md5.module';
+import { RSAKeyModule } from '../rsa-key-generator/rsa-key.module';
 import { UUIDGeneratorModule } from '../uuid-generator/uuid-generator.module';
 import { MenuItensComponent } from './menu-itens/menu-itens.component';
 import { MenuComponent } from './menu.component';
@@ -28,7 +29,8 @@ import { MenuComponent } from './menu.component';
     DocumentGeneratorModule,
     Base64Module,
     MD5Module,
-    JWTModule
+    JWTModule,
+    RSAKeyModule
   ],
   providers: [],
   bootstrap: [MenuComponent]

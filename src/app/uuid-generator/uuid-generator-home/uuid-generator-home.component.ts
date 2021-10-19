@@ -50,5 +50,9 @@ export class UUIDGeneratorHome implements OnInit {
         this.exportFileService.exportFile(exportUuid,fileParams);
     }
 
+    isMobile() : boolean {
+        return this.mobileQuery.matches;
+    }
+
   
 }

@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row table-base64">
-      <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
+      <div [class.col-6]="!isMobile()" [class.col-12]="isMobile()">
         <mat-form-field class="field-full-width" appearance="fill" name="encodeField" ngDefaultControl>
             <mat-label>Encode MD5</mat-label>
             <textarea matInput rows=10 [matTextareaAutosize]="true" [(ngModel)]="textToEncode" (input)="encodeMd5()"></textarea>
@@ -8,7 +8,7 @@
             <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('encode')">content_copy</mat-icon>
           </mat-form-field>
       </div>
-      <div [class.col-6]="!mobileQuery.matches" [class.col-12]="mobileQuery.matches">
+      <div [class.col-6]="!isMobile()" [class.col-12]="isMobile()">
         <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
             <mat-label>Decode MD5</mat-label>
             <textarea disabled matInput rows=10 [matTextareaAutosize]="true" [(ngModel)]="textToDecode">
