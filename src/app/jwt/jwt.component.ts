@@ -4,6 +4,7 @@ import { ExportFileService } from '../service/export-file.service';
 import { SharedService } from '../service/shared.service';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { KeyLike, SignJWT, importPKCS8 } from 'jose'
 
 const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
 const CryptoJS = require("crypto-js");
@@ -30,6 +31,9 @@ const CryptoJS = require("crypto-js");
     secretHsToken = '';
     secretHsTokenValue = '';
     secretHsEncoded : boolean = false;
+
+    jwtRsPrivateKey : string = '';
+    jwtRsPublicKey : string = '';
 
     control : boolean = false;
     fileContent: string | ArrayBuffer | null = '';
@@ -95,6 +99,15 @@ const CryptoJS = require("crypto-js");
             case 'HS512' : 
               this.jwtAlgorithmSelected = 3;
               break;  
+            case 'RS256' :
+              this.jwtAlgorithmSelected = 4;
+              break;
+            case 'RS384' :
+              this.jwtAlgorithmSelected = 5;
+              break;
+            case 'RS512' : 
+              this.jwtAlgorithmSelected = 6;
+              break; 
           } 
           this.controlDownloadFile = false;
         } catch (e) {
@@ -107,8 +120,12 @@ const CryptoJS = require("crypto-js");
       const jwtDecodedHeader = JSON.stringify(JSON.parse(this.jwtDecodedHeader));
       const headerEncoded = this.base64Url2(jwtDecodedHeader);  
       const jwtEncoded = headerEncoded + '.' + this.jwtEncoded.split('.')[1];
-      let signature = this.signKeyHS(jwtEncoded,JSON.parse(this.jwtDecodedHeader).alg);
-      this.jwtEncoded = jwtEncoded + '.' + signature;
+      if (this.jwtAlgorithmSelectedHS()) {
+        let signature = this.signKeyHS(jwtEncoded,JSON.parse(this.jwtDecodedHeader).alg);
+        this.jwtEncoded = jwtEncoded + '.' + signature;
+      } else if (this.jwtAlgorithmSelectedRS()) {
+        this.updateRsPrivateKey();
+      }
     }
 
     payloadEncode(){
@@ -121,17 +138,7 @@ const CryptoJS = require("crypto-js");
 
     updateAlgorithm(){
       const header = JSON.parse(this.jwtDecodedHeader);
-      switch (this.jwtAlgorithmSelected) {
-        case 1 :
-          header.alg = 'HS256';
-          break;
-        case 2 :
-          header.alg = 'HS384';
-          break;
-        case 3 : 
-          header.alg = 'HS512';
-          break;  
-      } 
+      header.alg = this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text;
       this.jwtDecodedHeader = JSON.stringify(header, undefined, 4);
       this.headerEncode();
     }
@@ -229,6 +236,52 @@ const CryptoJS = require("crypto-js");
     isMobile() : boolean {
       return this.mobileQuery.matches;
     }
+
+    updateRsPrivateKey(){
+      if (this.jwtEncoded !== '' && this.jwtRsPrivateKey !== '') {
+        this.privateKey().then((data)=>{
+          const jwt =  new SignJWT(JSON.parse(this.jwtDecodedPayload))
+          .setProtectedHeader(JSON.parse(this.jwtDecodedHeader))
+          .sign(data);
+          jwt.then((jwtData)=>{
+            this.jwtEncoded = jwtData;
+          }, (jwtError)=>{
+            
+          });
+        }, (error)=>{
+          
+        });
+      }
+    }
+
+    async privateKey() {
+      return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+    }
+
+    updateRsPublicKey(){
+      
+    }
+
+    signKeyRS(msg: string, alg : string) {
+      let signature = '';
+      switch (alg) {
+        case 'RS256' :
+          signature = CryptoJS.RSASHA256(msg, this.secretHsTokenValue);
+          this.jwtAlgorithmSelected = 1;
+          break;
+        case 'RS384' :
+          signature = CryptoJS.RSASHA384(msg, this.secretHsTokenValue);
+          this.jwtAlgorithmSelected = 2;
+          break;
+        case 'RS512' : 
+          signature  = CryptoJS.HmacSHA512(msg, this.secretHsTokenValue);
+          this.jwtAlgorithmSelected = 3;
+          break;
+      }
+      signature = this.base64url(signature);
+      return signature ;
+    }
+
 
   }
 

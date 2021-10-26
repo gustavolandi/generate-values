@@ -37,10 +37,10 @@
           <mat-icon class="btn-textarea" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Download" (click)="downloadFile('tokenDecodedPayload')">file_download</mat-icon>
           <mat-icon class="btn-textarea-copy" [class.hand-click]="!controlDownloadFile" [class.icon-disabled]="controlDownloadFile" matTooltip="Copiar" (click)="copyValue('tokenDecodedPayload')">content_copy</mat-icon>
         </mat-form-field>
+        <div class="mt-2">
+          <h4>JWT Signature</h4>
+        </div>
         <div class="col-12" *ngIf="jwtAlgorithmSelectedHS()">
-          <div class="mt-2">
-            <h4>JWT Signature</h4>
-          </div>
           <div class="mt-1">
             <mat-form-field class="col-6">
               <mat-label>Digite a secret key</mat-label>
@@ -54,9 +54,6 @@
           </div> -->
         </div>
         <div class="col-12" *ngIf="jwtAlgorithmSelectedRS()">
-          <div class="mt-2">
-            <h4>JWT Signature</h4>
-          </div>
           <div class="mt-1">
             <mat-form-field class="field-full-width" appearance="fill" name="publicKey" ngDefaultControl>
               <mat-label>Public Key</mat-label>

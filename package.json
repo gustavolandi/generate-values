@@ -27,6 +27,7 @@
     "exceljs": "^4.3.0",
     "faker": "^5.5.3",
     "file-saver": "^2.0.5",
+    "jose": "^4.1.2",
     "jwt-decode": "^3.1.2",
     "keypair": "^1.0.4",
     "md5-typescript": "^1.0.5",
