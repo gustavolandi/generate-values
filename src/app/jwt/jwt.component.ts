@@ -246,15 +246,19 @@ const CryptoJS = require("crypto-js");
           jwt.then((jwtData)=>{
             this.jwtEncoded = jwtData;
           }, (jwtError)=>{
-            
+            console.log(jwtError);
           });
         }, (error)=>{
-          
+          console.log(error);
         });
       }
     }
 
     async privateKey() {
+      return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+    }
+
+    async privateKeyPKCS1() {
       return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
     }
 
