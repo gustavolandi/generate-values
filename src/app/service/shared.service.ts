@@ -23,4 +23,10 @@ export class SharedService {
     public validateDigitsEquals(valueToValidate: string) : boolean {
         return valueToValidate.split('').every(char => char === valueToValidate[0]);
     }
+
+    public showSnackBar(messageSnackBar : string, timeSnackBar : number = 750) {
+        this._snackBar.open(messageSnackBar,'',{
+            duration: timeSnackBar
+          });
+    }
 }

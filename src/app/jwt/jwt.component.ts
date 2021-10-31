@@ -239,19 +239,37 @@ const CryptoJS = require("crypto-js");
 
     updateRsPrivateKey(){
       if (this.jwtEncoded !== '' && this.jwtRsPrivateKey !== '') {
-        this.privateKey().then((data)=>{
-          const jwt =  new SignJWT(JSON.parse(this.jwtDecodedPayload))
-          .setProtectedHeader(JSON.parse(this.jwtDecodedHeader))
-          .sign(data);
-          jwt.then((jwtData)=>{
-            this.jwtEncoded = jwtData;
-          }, (jwtError)=>{
-            console.log(jwtError);
+        if (this.validatePrivateKey()) {
+          this.privateKey().then((data)=>{
+            const jwt =  new SignJWT(JSON.parse(this.jwtDecodedPayload))
+            .setProtectedHeader(JSON.parse(this.jwtDecodedHeader))
+            .sign(data);
+            jwt.then((jwtData)=>{
+              this.jwtEncoded = jwtData;
+            }, (jwtError)=>{
+              this.sharedService.showSnackBar('Erro ao codificar jwt');
+            });
+          }, (error)=>{
+            this.sharedService.showSnackBar('Erro private key');
           });
-        }, (error)=>{
-          console.log(error);
-        });
+        }
       }
+    }
+
+    validatePrivateKey(){
+      const pkcs1Header = "-----BEGIN RSA PRIVATE KEY-----";
+      const pkcs1Footer = "-----END RSA PRIVATE KEY-----";
+      const pkcs8Header = "-----BEGIN PRIVATE KEY-----";
+      const pkcs8Footer = "-----END PRIVATE KEY-----";
+      if (this.jwtRsPrivateKey.indexOf(pkcs1Header) >= 0 || this.jwtRsPrivateKey.indexOf(pkcs1Footer) >=0) {
+        this.sharedService.showSnackBar('Private Key Format Invalid');
+        return false;
+      }
+      if (this.jwtRsPrivateKey.indexOf(pkcs8Header) < 0 || this.jwtRsPrivateKey.indexOf(pkcs8Footer) < 0) {
+        this.sharedService.showSnackBar('Private Key Format Invalid');
+        return false;
+      }
+      return true;
     }
 
     async privateKey() {
