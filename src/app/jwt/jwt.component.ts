@@ -4,7 +4,7 @@ import { ExportFileService } from '../service/export-file.service';
 import { SharedService } from '../service/shared.service';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { KeyLike, SignJWT, importPKCS8 } from 'jose'
+import { jwtVerify, SignJWT, importPKCS8, importSPKI } from 'jose';
 
 const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
 const CryptoJS = require("crypto-js");
@@ -132,8 +132,12 @@ const CryptoJS = require("crypto-js");
       const jwtDecodedPayload = JSON.stringify(JSON.parse(this.jwtDecodedPayload));
       const payloadEncoded = this.base64Url2(jwtDecodedPayload);  
       const jwtEncoded = this.jwtEncoded.split('.')[0] + '.' + payloadEncoded;
-      let signature = this.signKeyHS(jwtEncoded,JSON.parse(this.jwtDecodedHeader).alg);
-      this.jwtEncoded = jwtEncoded + '.' + signature;
+      if (this.jwtAlgorithmSelectedHS()) {
+        let signature = this.signKeyHS(jwtEncoded,JSON.parse(this.jwtDecodedHeader).alg);
+        this.jwtEncoded = jwtEncoded + '.' + signature;
+      } else if (this.jwtAlgorithmSelectedRS()) {
+        this.updateRsPrivateKey();
+      }
     }
 
     updateAlgorithm(){
@@ -230,19 +234,21 @@ const CryptoJS = require("crypto-js");
     }
 
     copyValue(valueToCopy : string) {
-      
+      this.sharedService.copyValue(valueToCopy);
     }
 
     isMobile() : boolean {
       return this.mobileQuery.matches;
     }
 
-    updateRsPrivateKey(){
-      if (this.jwtEncoded !== '' && this.jwtRsPrivateKey !== '') {
+    updateRsPrivateKey(encodedJwt : string = this.jwtEncoded,
+      decodedPayload : string = this.jwtDecodedPayload,
+      decodedHeader : string = this.jwtDecodedHeader) {
+      if (encodedJwt !== '' && this.jwtRsPrivateKey !== '') {
         if (this.validatePrivateKey()) {
           this.privateKey().then((data)=>{
-            const jwt =  new SignJWT(JSON.parse(this.jwtDecodedPayload))
-            .setProtectedHeader(JSON.parse(this.jwtDecodedHeader))
+            const jwt =  new SignJWT(JSON.parse(decodedPayload))
+            .setProtectedHeader(JSON.parse(decodedHeader))
             .sign(data);
             jwt.then((jwtData)=>{
               this.jwtEncoded = jwtData;
@@ -272,16 +278,46 @@ const CryptoJS = require("crypto-js");
       return true;
     }
 
+    updateRsPublicKey(){
+      if (this.jwtEncoded !== '' && this.jwtRsPublicKey !== '') {
+          if (this.validatePublicKey()){
+            this.publicKey().then((data) => {
+              jwtVerify(this.jwtEncoded,data).then((jwtVerifyResult) => {
+                this.sharedService.showSnackBar('Signature verified');
+              }, (errorJwtVerify) => {
+                this.sharedService.showSnackBar('Invalid signature');
+              });
+            })
+          }
+      }
+    }
+
+    validatePublicKey(){
+      const pkcs1Header = '-----BEGIN RSA PUBLIC KEY-----';
+      const pkcs1Footer = '-----END RSA PUBLIC KEY-----';
+      const pkcs8Header = '-----BEGIN PUBLIC KEY-----';
+      const pkcs8Footer = '-----END PUBLIC KEY-----';
+      if (this.jwtRsPublicKey.indexOf(pkcs1Header) >= 0 || this.jwtRsPublicKey.indexOf(pkcs1Footer) >=0) {
+        this.sharedService.showSnackBar('Public Key Format Invalid - PKCS1');
+        return false;
+      }
+      if (this.jwtRsPublicKey.indexOf(pkcs8Header) < 0 || this.jwtRsPublicKey.indexOf(pkcs8Footer) < 0) {
+        this.sharedService.showSnackBar('Public Key Format Invalid');
+        return false;
+      }
+      return true;
+    }
+
     async privateKey() {
       return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
     }
 
-    async privateKeyPKCS1() {
-      return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+    async publicKey() {
+      return await importSPKI(this.jwtRsPublicKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
     }
 
-    updateRsPublicKey(){
-      
+    async privateKeyPKCS1() {
+      return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
     }
 
     signKeyRS(msg: string, alg : string) {
