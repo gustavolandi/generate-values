@@ -268,11 +268,11 @@ const CryptoJS = require("crypto-js");
       const pkcs8Header = "-----BEGIN PRIVATE KEY-----";
       const pkcs8Footer = "-----END PRIVATE KEY-----";
       if (this.jwtRsPrivateKey.indexOf(pkcs1Header) >= 0 || this.jwtRsPrivateKey.indexOf(pkcs1Footer) >=0) {
-        this.sharedService.showSnackBar('Private Key Format Invalid');
+        this.sharedService.showSnackBar('Formato Inválido Chave Privada - PKCS1');
         return false;
       }
       if (this.jwtRsPrivateKey.indexOf(pkcs8Header) < 0 || this.jwtRsPrivateKey.indexOf(pkcs8Footer) < 0) {
-        this.sharedService.showSnackBar('Private Key Format Invalid');
+        this.sharedService.showSnackBar('Formato Inválido Chave Privada');
         return false;
       }
       return true;
@@ -283,9 +283,9 @@ const CryptoJS = require("crypto-js");
           if (this.validatePublicKey()){
             this.publicKey().then((data) => {
               jwtVerify(this.jwtEncoded,data).then((jwtVerifyResult) => {
-                this.sharedService.showSnackBar('Signature verified');
+                this.sharedService.showSnackBar('Assinatura verificada');
               }, (errorJwtVerify) => {
-                this.sharedService.showSnackBar('Invalid signature');
+                this.sharedService.showSnackBar('Assinatura inválida');
               });
             })
           }
@@ -298,11 +298,11 @@ const CryptoJS = require("crypto-js");
       const pkcs8Header = '-----BEGIN PUBLIC KEY-----';
       const pkcs8Footer = '-----END PUBLIC KEY-----';
       if (this.jwtRsPublicKey.indexOf(pkcs1Header) >= 0 || this.jwtRsPublicKey.indexOf(pkcs1Footer) >=0) {
-        this.sharedService.showSnackBar('Public Key Format Invalid - PKCS1');
+        this.sharedService.showSnackBar('Formato Inválido Chave Pública - PKCS1');
         return false;
       }
       if (this.jwtRsPublicKey.indexOf(pkcs8Header) < 0 || this.jwtRsPublicKey.indexOf(pkcs8Footer) < 0) {
-        this.sharedService.showSnackBar('Public Key Format Invalid');
+        this.sharedService.showSnackBar('Formato Inválido Chave Pública');
         return false;
       }
       return true;
