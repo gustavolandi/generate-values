@@ -51,11 +51,9 @@ const CryptoJS = require("crypto-js");
       { text: 'PS256', id: 10 }, 
       { text: 'PS384', id: 11 },
       { text: 'PS512', id: 12 },
-  ];
+    ];
     jwtAlgorithmSelected : number = 1;
 
-    controlDownloadFile : boolean = true;
-    
     @ViewChild('fileInputConvert') fileInputConvert!: ElementRef;
     @ViewChild('fileInputEncode') fileEncode!: ElementRef;
     
@@ -80,7 +78,6 @@ const CryptoJS = require("crypto-js");
         this.jwtDecodedHeader = '';
         this.jwtDecodedPayload = '';
         this.jwtDecodedSignature = '';
-        this.controlDownloadFile = true;
         return;
       }
 
@@ -95,45 +92,7 @@ const CryptoJS = require("crypto-js");
           let decodedHeader = JSON.stringify(atob(this.jwtEncoded.split('.')[0])).split('\\').join('').slice(1, -1);
           
           this.jwtDecodedHeader =  JSON.stringify(JSON.parse(decodedHeader), undefined, 4);
-          switch (JSON.parse(this.jwtDecodedHeader).alg) {
-            case 'HS256' :
-              this.jwtAlgorithmSelected = 1;
-              break;
-            case 'HS384' :
-              this.jwtAlgorithmSelected = 2;
-              break;
-            case 'HS512' : 
-              this.jwtAlgorithmSelected = 3;
-              break;  
-            case 'RS256' :
-              this.jwtAlgorithmSelected = 4;
-              break;
-            case 'RS384' :
-              this.jwtAlgorithmSelected = 5;
-              break;
-            case 'RS512' : 
-              this.jwtAlgorithmSelected = 6;
-              break;
-            case 'ES256' : 
-              this.jwtAlgorithmSelected = 7;
-              break;  
-            case 'ES384' : 
-              this.jwtAlgorithmSelected = 8;
-              break; 
-            case 'ES512' : 
-              this.jwtAlgorithmSelected = 9;
-              break;
-            case 'PS256' : 
-              this.jwtAlgorithmSelected = 10;
-              break;  
-            case 'PS384' : 
-              this.jwtAlgorithmSelected = 11;
-              break; 
-            case 'PS512' : 
-              this.jwtAlgorithmSelected = 12;
-              break;  
-          } 
-          this.controlDownloadFile = false;
+          this.jwtAlgorithmSelected = this.jwtAlgorithm.filter((alg) => alg.text === JSON.parse(this.jwtDecodedHeader).alg)[0].id;
           if (this.jwtAlgorithmPairKey()) {
             this.updateRsPublicKey();
           }
@@ -260,25 +219,25 @@ const CryptoJS = require("crypto-js");
       }
     }
 
-    readFile(event: any) {
-     
-    }
-
-    readAndConvertFile(event: any) {
-     
-    }
-
     downloadFile(type: string) {
      
     }
 
     copyValue(valueToCopy : string) {
+      let value = '';
       if (valueToCopy === 'tokenEncoded') {
-        this.sharedService.copyValue(this.jwtEncoded);
+        value = this.jwtEncoded;
       } else if (valueToCopy === 'tokenDecodedHeader') {
-        this.sharedService.copyValue(this.jwtDecodedHeader);
+        value = this.jwtDecodedHeader;
       } else if (valueToCopy === 'tokenDecodedPayload') {
-        this.sharedService.copyValue(this.jwtDecodedPayload);
+        value = this.jwtDecodedPayload;
+      } else if (valueToCopy === 'publicKey') {
+        value = this.jwtRsPublicKey;
+      } else if (valueToCopy === 'privateKey') {
+        value = this.jwtRsPrivateKey;
+      }
+      if (value != undefined && value != '') {
+        this.sharedService.copyValue(value);
       }
     }
 
