@@ -45,6 +45,9 @@ const CryptoJS = require("crypto-js");
       { text: 'RS256', id: 4 }, 
       { text: 'RS384', id: 5 },
       { text: 'RS512', id: 6 },
+      { text: 'ES256', id: 7 }, 
+      { text: 'ES384', id: 8 },
+      { text: 'ES512', id: 9 },
   ];
     jwtAlgorithmSelected : number = 1;
 
@@ -107,6 +110,15 @@ const CryptoJS = require("crypto-js");
               break;
             case 'RS512' : 
               this.jwtAlgorithmSelected = 6;
+              break;
+            case 'ES256' : 
+              this.jwtAlgorithmSelected = 7;
+              break;  
+            case 'ES384' : 
+              this.jwtAlgorithmSelected = 8;
+              break; 
+            case 'ES512' : 
+              this.jwtAlgorithmSelected = 9;
               break; 
           } 
           this.controlDownloadFile = false;
@@ -208,6 +220,11 @@ const CryptoJS = require("crypto-js");
       return this.jwtAlgorithmSelected === 4 || this.jwtAlgorithmSelected === 5 || this.jwtAlgorithmSelected === 6;
     }
 
+    jwtAlgorithmSelectedES(){
+      return this.jwtAlgorithmSelected === 7 || this.jwtAlgorithmSelected === 8 || this.jwtAlgorithmSelected === 9;
+    }
+
+
     encodeKeyHsBase64(checked: boolean) {
       this.secretHsEncoded = checked;
       this.updateSecretHS();
@@ -234,7 +251,13 @@ const CryptoJS = require("crypto-js");
     }
 
     copyValue(valueToCopy : string) {
-      this.sharedService.copyValue(valueToCopy);
+      if (valueToCopy === 'tokenEncoded') {
+        this.sharedService.copyValue(this.jwtEncoded);
+      } else if (valueToCopy === 'tokenDecodedHeader') {
+        this.sharedService.copyValue(this.jwtDecodedHeader);
+      } else if (valueToCopy === 'tokenDecodedPayload') {
+        this.sharedService.copyValue(this.jwtDecodedPayload);
+      }
     }
 
     isMobile() : boolean {
@@ -245,19 +268,23 @@ const CryptoJS = require("crypto-js");
       decodedPayload : string = this.jwtDecodedPayload,
       decodedHeader : string = this.jwtDecodedHeader) {
       if (encodedJwt !== '' && this.jwtRsPrivateKey !== '') {
-        if (this.validatePrivateKey()) {
-          this.privateKey().then((data)=>{
-            const jwt =  new SignJWT(JSON.parse(decodedPayload))
-            .setProtectedHeader(JSON.parse(decodedHeader))
-            .sign(data);
-            jwt.then((jwtData)=>{
-              this.jwtEncoded = jwtData;
-            }, (jwtError)=>{
-              this.sharedService.showSnackBar('Erro ao codificar jwt');
+        if (this.jwtAlgorithmSelectedRS()) {
+          if (this.validatePrivateKey()) {
+            this.privateKey().then((data)=>{
+              const jwt =  new SignJWT(JSON.parse(decodedPayload))
+              .setProtectedHeader(JSON.parse(decodedHeader))
+              .sign(data);
+              jwt.then((jwtData)=>{
+                this.jwtEncoded = jwtData;
+              }, (jwtError)=>{
+                this.sharedService.showSnackBar('Erro ao codificar jwt');
+              });
+            }, (error)=>{
+              this.sharedService.showSnackBar('Erro private key');
             });
-          }, (error)=>{
-            this.sharedService.showSnackBar('Erro private key');
-          });
+          }
+        } else if (this.jwtAlgorithmSelectedES()) {
+
         }
       }
     }
@@ -280,6 +307,7 @@ const CryptoJS = require("crypto-js");
 
     updateRsPublicKey(){
       if (this.jwtEncoded !== '' && this.jwtRsPublicKey !== '') {
+        if (this.jwtAlgorithmSelectedRS()) {
           if (this.validatePublicKey()){
             this.publicKey().then((data) => {
               jwtVerify(this.jwtEncoded,data).then((jwtVerifyResult) => {
@@ -289,6 +317,9 @@ const CryptoJS = require("crypto-js");
               });
             })
           }
+        } else if (this.jwtAlgorithmSelectedES()) {
+
+        }
       }
     }
 
