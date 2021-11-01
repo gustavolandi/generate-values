@@ -122,6 +122,9 @@ const CryptoJS = require("crypto-js");
               break; 
           } 
           this.controlDownloadFile = false;
+          if ((this.jwtAlgorithmSelectedRS() || this.jwtAlgorithmSelectedES())) {
+            this.updateRsPublicKey();
+          }
         } catch (e) {
               
         }
@@ -268,23 +271,18 @@ const CryptoJS = require("crypto-js");
       decodedPayload : string = this.jwtDecodedPayload,
       decodedHeader : string = this.jwtDecodedHeader) {
       if (encodedJwt !== '' && this.jwtRsPrivateKey !== '') {
-        if (this.jwtAlgorithmSelectedRS()) {
-          if (this.validatePrivateKey()) {
+        if (this.validatePrivateKey() && encodedJwt.split('.').length < 3) {
             this.privateKey().then((data)=>{
               const jwt =  new SignJWT(JSON.parse(decodedPayload))
               .setProtectedHeader(JSON.parse(decodedHeader))
               .sign(data);
-              jwt.then((jwtData)=>{
-                this.jwtEncoded = jwtData;
-              }, (jwtError)=>{
-                this.sharedService.showSnackBar('Erro ao codificar jwt');
-              });
-            }, (error)=>{
-              this.sharedService.showSnackBar('Erro private key');
-            });
-          }
-        } else if (this.jwtAlgorithmSelectedES()) {
-
+              jwt.then(
+                (jwtData) => this.jwtEncoded = jwtData,
+                () => this.sharedService.showSnackBar('Erro ao codificar jwt')
+              );
+            }, 
+            ()=> this.sharedService.showSnackBar('Erro private key')
+            ); 
         }
       }
     }
@@ -307,20 +305,25 @@ const CryptoJS = require("crypto-js");
 
     updateRsPublicKey(){
       if (this.jwtEncoded !== '' && this.jwtRsPublicKey !== '') {
-        if (this.jwtAlgorithmSelectedRS()) {
-          if (this.validatePublicKey()){
-            this.publicKey().then((data) => {
-              jwtVerify(this.jwtEncoded,data).then((jwtVerifyResult) => {
-                this.sharedService.showSnackBar('Assinatura verificada');
-              }, (errorJwtVerify) => {
-                this.sharedService.showSnackBar('Assinatura inválida');
-              });
-            })
-          }
-        } else if (this.jwtAlgorithmSelectedES()) {
-
+        if (this.validatePublicKey()){
+          this.publicKey()
+          .then((data) => {
+            jwtVerify(this.jwtEncoded,data).then(
+              () => this.validSignature(), 
+              () => this.invalidSignatureSnackBar()
+            );
+          })
+          .catch(() => this.invalidSignatureSnackBar())
         }
       }
+    }
+
+    validSignature() {
+      this.sharedService.showSnackBar('Assinatura verificada');
+    }
+
+    invalidSignatureSnackBar(){
+      this.sharedService.showSnackBar('Assinatura inválida');
     }
 
     validatePublicKey(){

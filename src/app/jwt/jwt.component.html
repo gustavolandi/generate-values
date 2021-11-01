@@ -53,7 +53,7 @@
             </mat-checkbox>
           </div> -->
         </div>
-        <div class="col-12" *ngIf="jwtAlgorithmSelectedRS()">
+        <div class="col-12" *ngIf="jwtAlgorithmSelectedRS() || jwtAlgorithmSelectedES()">
           <div class="mt-1">
             <mat-form-field class="field-full-width" appearance="fill" name="publicKey" ngDefaultControl>
               <mat-label>Public Key</mat-label>
