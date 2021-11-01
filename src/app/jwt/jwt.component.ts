@@ -48,6 +48,9 @@ const CryptoJS = require("crypto-js");
       { text: 'ES256', id: 7 }, 
       { text: 'ES384', id: 8 },
       { text: 'ES512', id: 9 },
+      { text: 'PS256', id: 10 }, 
+      { text: 'PS384', id: 11 },
+      { text: 'PS512', id: 12 },
   ];
     jwtAlgorithmSelected : number = 1;
 
@@ -119,14 +122,23 @@ const CryptoJS = require("crypto-js");
               break; 
             case 'ES512' : 
               this.jwtAlgorithmSelected = 9;
+              break;
+            case 'PS256' : 
+              this.jwtAlgorithmSelected = 10;
+              break;  
+            case 'PS384' : 
+              this.jwtAlgorithmSelected = 11;
               break; 
+            case 'PS512' : 
+              this.jwtAlgorithmSelected = 12;
+              break;  
           } 
           this.controlDownloadFile = false;
-          if ((this.jwtAlgorithmSelectedRS() || this.jwtAlgorithmSelectedES())) {
+          if (this.jwtAlgorithmPairKey()) {
             this.updateRsPublicKey();
           }
         } catch (e) {
-              
+            this.sharedService.showSnackBar('Erro ao decodificar token',1000);  
         }
       }
     }
@@ -219,6 +231,10 @@ const CryptoJS = require("crypto-js");
       }
     }
 
+    jwtAlgorithmPairKey(){
+      return this.jwtAlgorithmSelectedRS() || this.jwtAlgorithmSelectedES() || this.jwtAlgorithmSelectedPS();
+    }
+
     jwtAlgorithmSelectedRS(){
       return this.jwtAlgorithmSelected === 4 || this.jwtAlgorithmSelected === 5 || this.jwtAlgorithmSelected === 6;
     }
@@ -227,6 +243,9 @@ const CryptoJS = require("crypto-js");
       return this.jwtAlgorithmSelected === 7 || this.jwtAlgorithmSelected === 8 || this.jwtAlgorithmSelected === 9;
     }
 
+    jwtAlgorithmSelectedPS(){
+      return this.jwtAlgorithmSelected === 10 || this.jwtAlgorithmSelected === 11 || this.jwtAlgorithmSelected === 12;
+    }
 
     encodeKeyHsBase64(checked: boolean) {
       this.secretHsEncoded = checked;
