@@ -1,0 +1,85 @@
+<div class="d-flex justify-content-center m-3">
+  <mat-form-field appearance="fill">
+    <mat-label>Algoritmo JWT</mat-label>
+    <mat-select [(ngModel)]="jwtAlgorithmSelected" (selectionChange)="updateAlgorithm()">
+      <mat-option *ngFor="let alg of jwtAlgorithm" [value]="alg.id">
+          {{alg.text}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="container-fluid">
+    <div class="row table-base64">
+      <div [class.col-6]="!isMobile()" [class.col-12]="isMobile()">
+        <mat-form-field class="field-full-width jwt-font" appearance="fill" name="encodeField" ngDefaultControl>
+            <mat-label>JWT</mat-label>
+            <textarea [matTextareaAutosize]="true" matInput rows=30 [(ngModel)]="jwtEncoded" (input)="jwtDecode()"></textarea>
+            <mat-icon class="btn-textarea" [class.hand-click]="jwtEncoded != ''" [class.icon-disabled]="jwtEncoded === ''" matTooltip="Download" (click)="downloadFile('tokenEncoded')">file_download</mat-icon>
+            <mat-icon class="btn-textarea-copy" [class.hand-click]="jwtEncoded != ''" [class.icon-disabled]="jwtEncoded === ''" matTooltip="Copiar" (click)="copyValue('tokenEncoded')">content_copy</mat-icon>
+          </mat-form-field>
+          <div class="mb-2" *ngIf="signatureValidationSelected != 1" [class.jwt-check-signature]="signatureValidationSelected === 2" [class.jwt-invalid-signature]="signatureValidationSelected === 3">
+            <span class="jwt-font">{{ getSignatureValidationText() }}</span>
+          </div>
+      </div>
+      <div class="mt-3 mb-3" *ngIf="isMobile()">
+        <mat-divider></mat-divider>
+      </div>
+      <div [class.col-6]="!isMobile()" [class.col-12]="isMobile()">
+        <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
+          <mat-label>Header</mat-label>
+          <textarea [matTextareaAutosize]="true" matInput rows=5 [(ngModel)]="jwtDecodedHeader" (input)="headerEncode()">
+          </textarea>
+          <mat-icon class="btn-textarea" [class.hand-click]="jwtDecodedHeader != ''" [class.icon-disabled]="jwtDecodedHeader === ''" matTooltip="Download" (click)="downloadFile('tokenDecodedHeader')">file_download</mat-icon>
+          <mat-icon class="btn-textarea-copy" [class.hand-click]="jwtDecodedHeader != ''" [class.icon-disabled]="jwtDecodedHeader === ''" matTooltip="Copiar" (click)="copyValue('tokenDecodedHeader')">content_copy</mat-icon>
+        </mat-form-field>
+        <mat-form-field class="field-full-width" appearance="fill" name="decodeField" ngDefaultControl>
+          <mat-label>Payload</mat-label>
+          <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="jwtDecodedPayload" (input)="payloadEncode()">
+          </textarea>
+          <mat-icon class="btn-textarea" [class.hand-click]="jwtDecodedPayload != ''" [class.icon-disabled]="jwtDecodedPayload === ''" matTooltip="Download" (click)="downloadFile('tokenDecodedPayload')">file_download</mat-icon>
+          <mat-icon class="btn-textarea-copy" [class.hand-click]="jwtDecodedPayload != ''" [class.icon-disabled]="jwtDecodedPayload === ''" matTooltip="Copiar" (click)="copyValue('tokenDecodedPayload')">content_copy</mat-icon>
+        </mat-form-field>
+        <div class="mt-2">
+          <h4>JWT Signature</h4>
+        </div>
+        <div class="col-12" *ngIf="jwtAlgorithmSelectedHS()">
+          <div class="mt-1">
+            <mat-form-field class="col-6">
+              <mat-label>Digite a secret key</mat-label>
+              <input matInput [(ngModel)]="secretHsToken" (input)="updateSecretHS()">
+            </mat-form-field>
+          </div>
+          <!-- <div class="mt-1">
+            <mat-checkbox [checked]="false" (change)="encodeKeyHsBase64($event.checked)">
+              Encode Key Base64
+            </mat-checkbox>
+          </div> -->
+        </div>
+        <div class="col-12" *ngIf="jwtAlgorithmPairKey()">
+          <div class="mt-1">
+            <mat-form-field class="field-full-width" appearance="fill" name="publicKey" ngDefaultControl>
+              <mat-label>Public Key</mat-label>
+              <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="jwtRsPublicKey" (input)="updateRsPublicKey()">
+              </textarea>
+              <mat-icon class="btn-textarea" [class.hand-click]="jwtRsPublicKey != ''" [class.icon-disabled]="jwtRsPublicKey === ''" matTooltip="Download" (click)="downloadFile('publicKey')">file_download</mat-icon>
+              <mat-icon class="btn-textarea-copy" [class.hand-click]="jwtRsPublicKey != ''" [class.icon-disabled]="jwtRsPublicKey === ''" matTooltip="Copiar" (click)="copyValue('publicKey')">content_copy</mat-icon>
+            </mat-form-field>
+          </div>
+          <div class="mt-1">
+            <mat-form-field class="field-full-width" appearance="fill" name="privateKey" ngDefaultControl>
+              <mat-label>Private Key</mat-label>
+              <textarea [matTextareaAutosize]="true" matInput rows=10 [(ngModel)]="jwtRsPrivateKey" (input)="updateRsPrivateKey()">
+              </textarea>
+              <mat-icon class="btn-textarea" [class.hand-click]="jwtRsPrivateKey != ''" [class.icon-disabled]="jwtRsPrivateKey === ''" matTooltip="Download" (click)="downloadFile('privateKey')">file_download</mat-icon>
+              <mat-icon class="btn-textarea-copy" [class.hand-click]="jwtRsPrivateKey != ''" [class.icon-disabled]="jwtRsPrivateKey === ''" matTooltip="Copiar" (click)="copyValue('privateKey')">content_copy</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+

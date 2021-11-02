@@ -1,20 +1,20 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ExportFileService } from '../service/export-file.service';
-import { SharedService } from '../service/shared.service';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { jwtVerify, SignJWT, importPKCS8, importSPKI, importJWK, JWK } from 'jose';
+import { ExportFileService } from 'src/app/service/export-file.service';
+import { SharedService } from 'src/app/service/shared.service';
 
 const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
 const CryptoJS = require("crypto-js");
 
 @Component({
-    selector: 'jwt',
-    templateUrl: './jwt.component.html',
-    styleUrls: ['./jwt.component.css']
+    selector: 'jwt-validation',
+    templateUrl: './jwt-validation.component.html',
+    styleUrls: ['./jwt-validation.component.css']
   })
-  export class JWTComponent implements OnInit {
+  export class JWTValidationComponent implements OnInit {
     
     mobileQuery: MediaQueryList;
     private _mobileQueryListener: () => void;

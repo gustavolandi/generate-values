@@ -6,12 +6,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ExportFileModule } from '../export-file/export-file.module';
 import { MaterialModule } from '../material/material.module';
 import { SharedModule } from '../shared/shared.module';
-import { JWTComponent } from './jwt.component';
+import { JWTGenerateComponent } from './jwt-generate/jwt-generate.component';
+import { JWTValidationComponent } from './jwt-validation/jwt-validation.component';
 
 
 @NgModule({
   declarations: [
-    JWTComponent
+    JWTGenerateComponent,
+    JWTValidationComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { JWTComponent } from './jwt.component';
     SharedModule
   ],
   exports : [    
-    JWTComponent
+    JWTGenerateComponent,
+    JWTValidationComponent
   ],
   providers: [],
 })

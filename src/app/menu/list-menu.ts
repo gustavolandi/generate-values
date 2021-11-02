@@ -32,12 +32,17 @@ export const MENU_ITENS : MenuItem[] = [
     },
     {
       name : 'jwt',
-      fullName : 'JWT',
+      fullName : 'JWT Validation',
       item : 6
+    },
+    {
+      name : 'jwt generate',
+      fullName : 'JWT Generate',
+      item : 7
     },
     {
       name : 'rsa',
       fullName : 'RSA Key Generator',
-      item : 7
+      item : 8
     },
   ];
