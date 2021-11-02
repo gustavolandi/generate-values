@@ -4,7 +4,7 @@ import { ExportFileService } from '../service/export-file.service';
 import { SharedService } from '../service/shared.service';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { jwtVerify, SignJWT, importPKCS8, importSPKI } from 'jose';
+import { jwtVerify, SignJWT, importPKCS8, importSPKI, importJWK, JWK } from 'jose';
 
 const REGEX_JWT = /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/;
 const CryptoJS = require("crypto-js");
@@ -314,44 +314,42 @@ const CryptoJS = require("crypto-js");
         return false;
       }
       if (this.jwtRsPublicKey.indexOf(pkcs8Header) < 0 || this.jwtRsPublicKey.indexOf(pkcs8Footer) < 0) {
-        this.sharedService.showSnackBar('Formato Inválido Chave Pública');
-        return false;
+          const JWK = this.validateJwk();
+          if (JWK == null) {
+            this.sharedService.showSnackBar('Formato Inválido Chave Pública');
+            return false;
+        }
       }
       return true;
     }
+
+    validateJwk() : JWK | null {
+      try {
+        const JWK : JWK = JSON.parse(this.jwtRsPublicKey);
+        return JWK;
+      } catch(e) {
+        return null;
+      }
+    }
+
 
     async privateKey() {
       return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
     }
 
     async publicKey() {
-      return await importSPKI(this.jwtRsPublicKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+      const JWK = this.validateJwk();
+      if (JWK == null) {
+        return await importSPKI(this.jwtRsPublicKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+      } else {
+        JWK.use = 'sig';
+        return await importJWK(JWK, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+      }
     }
 
     async privateKeyPKCS1() {
       return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
     }
-
-    signKeyRS(msg: string, alg : string) {
-      let signature = '';
-      switch (alg) {
-        case 'RS256' :
-          signature = CryptoJS.RSASHA256(msg, this.secretHsTokenValue);
-          this.jwtAlgorithmSelected = 1;
-          break;
-        case 'RS384' :
-          signature = CryptoJS.RSASHA384(msg, this.secretHsTokenValue);
-          this.jwtAlgorithmSelected = 2;
-          break;
-        case 'RS512' : 
-          signature  = CryptoJS.HmacSHA512(msg, this.secretHsTokenValue);
-          this.jwtAlgorithmSelected = 3;
-          break;
-      }
-      signature = this.base64url(signature);
-      return signature ;
-    }
-
 
   }
 
