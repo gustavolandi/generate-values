@@ -256,10 +256,16 @@ const CryptoJS = require("crypto-js");
               .sign(data);
               jwt.then(
                 (jwtData) => this.jwtEncoded = jwtData,
-                () => this.sharedService.showSnackBar('Erro ao codificar jwt')
+                // () => this.sharedService.showSnackBar('Erro ao codificar jwt')
+                (e) => {
+                  console.log(e);
+                  this.sharedService.showSnackBar('Erro ao codificar jwt')}
               );
             }, 
-            ()=> this.sharedService.showSnackBar('Erro private key')
+            // ()=> this.sharedService.showSnackBar('Erro private key')
+            (e2) => {
+              console.log(e2);
+              this.sharedService.showSnackBar('Erro private key')}
             ); 
         }
       }
@@ -275,8 +281,11 @@ const CryptoJS = require("crypto-js");
         return false;
       }
       if (this.jwtRsPrivateKey.indexOf(pkcs8Header) < 0 || this.jwtRsPrivateKey.indexOf(pkcs8Footer) < 0) {
-        this.sharedService.showSnackBar('Formato Inválido Chave Privada');
-        return false;
+        const JWK = this.validateJwk(this.jwtRsPrivateKey);
+        if (JWK == null) {
+          this.sharedService.showSnackBar('Formato Inválido Chave Privada');
+          return false;
+        }
       }
       return true;
     }
@@ -314,7 +323,7 @@ const CryptoJS = require("crypto-js");
         return false;
       }
       if (this.jwtRsPublicKey.indexOf(pkcs8Header) < 0 || this.jwtRsPublicKey.indexOf(pkcs8Footer) < 0) {
-          const JWK = this.validateJwk();
+          const JWK = this.validateJwk(this.jwtRsPublicKey);
           if (JWK == null) {
             this.sharedService.showSnackBar('Formato Inválido Chave Pública');
             return false;
@@ -323,22 +332,27 @@ const CryptoJS = require("crypto-js");
       return true;
     }
 
-    validateJwk() : JWK | null {
+    validateJwk(key: string) : JWK | null {
       try {
-        const JWK : JWK = JSON.parse(this.jwtRsPublicKey);
+        const JWK : JWK = JSON.parse(key);
         return JWK;
       } catch(e) {
         return null;
       }
     }
 
-
     async privateKey() {
-      return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+      const JWK = this.validateJwk(this.jwtRsPrivateKey);
+      if (JWK == null) {
+        return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+      } else {
+        JWK.use = 'sig';
+        return await importJWK(JWK, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+      }
     }
 
     async publicKey() {
-      const JWK = this.validateJwk();
+      const JWK = this.validateJwk(this.jwtRsPublicKey);
       if (JWK == null) {
         return await importSPKI(this.jwtRsPublicKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
       } else {
