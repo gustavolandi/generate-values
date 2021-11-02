@@ -38,6 +38,14 @@ const CryptoJS = require("crypto-js");
     control : boolean = false;
     fileContent: string | ArrayBuffer | null = '';
 
+    signatureValidationText = [
+      { text : '', id : 1 },
+      { text : 'Assinatura Válida', id : 2 },
+      { text : 'Assinatura Inválida', id : 3 },
+    ];
+
+    signatureValidationSelected = 1;
+
     jwtAlgorithm = [
       { text: 'HS256', id: 1 }, 
       { text: 'HS384', id: 2 },
@@ -256,16 +264,10 @@ const CryptoJS = require("crypto-js");
               .sign(data);
               jwt.then(
                 (jwtData) => this.jwtEncoded = jwtData,
-                // () => this.sharedService.showSnackBar('Erro ao codificar jwt')
-                (e) => {
-                  console.log(e);
-                  this.sharedService.showSnackBar('Erro ao codificar jwt')}
+                () => this.sharedService.showSnackBar('Erro ao codificar jwt')
               );
             }, 
-            // ()=> this.sharedService.showSnackBar('Erro private key')
-            (e2) => {
-              console.log(e2);
-              this.sharedService.showSnackBar('Erro private key')}
+            ()=> this.sharedService.showSnackBar('Erro private key')
             ); 
         }
       }
@@ -297,20 +299,24 @@ const CryptoJS = require("crypto-js");
           .then((data) => {
             jwtVerify(this.jwtEncoded,data).then(
               () => this.validSignature(), 
-              () => this.invalidSignatureSnackBar()
+              () => this.invalidSignature()
             );
           })
-          .catch(() => this.invalidSignatureSnackBar())
+          .catch(() => this.invalidSignature())
         }
+      } else if (this.jwtRsPublicKey === '') {
+        this.selectSignatureEmpy();
       }
     }
 
     validSignature() {
-      this.sharedService.showSnackBar('Assinatura verificada');
+      this.selecValidSignature();
+      // this.sharedService.showSnackBar('Assinatura verificada');
     }
 
-    invalidSignatureSnackBar(){
-      this.sharedService.showSnackBar('Assinatura inválida');
+    invalidSignature(){
+      this.selectInvalidSignature();
+      // this.sharedService.showSnackBar('Assinatura inválida');
     }
 
     validatePublicKey(){
@@ -363,6 +369,22 @@ const CryptoJS = require("crypto-js");
 
     async privateKeyPKCS1() {
       return await importPKCS8(this.jwtRsPrivateKey, this.jwtAlgorithm.filter((alg) => alg.id === this.jwtAlgorithmSelected)[0].text);
+    }
+
+    getSignatureValidationText() : string {
+      return this.signatureValidationText.filter((item) => item.id === this.signatureValidationSelected)[0].text;
+    }
+
+    selectInvalidSignature(){
+      this.signatureValidationSelected = 3;
+    }
+
+    selecValidSignature(){
+      this.signatureValidationSelected = 2;
+    }
+
+    selectSignatureEmpy() {
+      this.signatureValidationSelected = 1;
     }
 
   }

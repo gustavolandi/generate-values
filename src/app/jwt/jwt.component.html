@@ -18,6 +18,9 @@
             <mat-icon class="btn-textarea" [class.hand-click]="jwtEncoded != ''" [class.icon-disabled]="jwtEncoded === ''" matTooltip="Download" (click)="downloadFile('tokenEncoded')">file_download</mat-icon>
             <mat-icon class="btn-textarea-copy" [class.hand-click]="jwtEncoded != ''" [class.icon-disabled]="jwtEncoded === ''" matTooltip="Copiar" (click)="copyValue('tokenEncoded')">content_copy</mat-icon>
           </mat-form-field>
+          <div class="mb-2" *ngIf="signatureValidationSelected != 1" [class.jwt-check-signature]="signatureValidationSelected === 2" [class.jwt-invalid-signature]="signatureValidationSelected === 3">
+            <span class="jwt-font">{{ getSignatureValidationText() }}</span>
+          </div>
       </div>
       <div class="mt-3 mb-3" *ngIf="isMobile()">
         <mat-divider></mat-divider>
