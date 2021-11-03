@@ -38,6 +38,15 @@ const CryptoJS = require("crypto-js");
 
     control : boolean = false;
     fileContent: string | ArrayBuffer | null = '';
+    generateSecretHS : number = 1;
+    secretHs = '';
+    expireTimeSelect : number = 1;
+    expireTime = '';
+
+    options = [
+      { text : 'Sim', id : 1 },
+      { text : 'Não', id : 2 },
+    ];
 
     signatureValidationText = [
       { text : '', id : 1 },
@@ -79,6 +88,10 @@ const CryptoJS = require("crypto-js");
 
     ngOnInit(): void {
         
+    }
+
+    generateToken(){
+      
     }
 
     jwtDecode(){
